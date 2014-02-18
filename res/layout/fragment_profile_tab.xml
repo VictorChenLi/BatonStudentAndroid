@@ -55,10 +55,10 @@
          android:layout_margin="10dip"
          android:layout_marginBottom="20dip"/>
       
-     <Button android:id="@+id/btnRegister"
+     <Button android:id="@+id/btnConfirm"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
-         android:text="Register"
+         android:text="Confirm"
          android:layout_margin="10dip"/>
 
 </LinearLayout>

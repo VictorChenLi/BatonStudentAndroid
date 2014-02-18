@@ -25,7 +25,7 @@
          to target higher versions.
     -->
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="11"
         android:targetSdkVersion="16" />
 
     <!-- GCM connects to Google Services. -->
@@ -67,14 +67,20 @@
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         
-        <!-- Main Activity -->
+        <!-- Main Activity, about to deprecated -->
         <activity
             android:name="ca.utoronto.ece1778.baton.gcm.client.main.MainActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name" >
+        </activity>
+        
+        <!-- MainScreen Activity, about to deprecated -->
+        <activity
+            android:name="ca.utoronto.ece1778.baton.gcm.client.main.MainScreenActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name" >
         </activity>

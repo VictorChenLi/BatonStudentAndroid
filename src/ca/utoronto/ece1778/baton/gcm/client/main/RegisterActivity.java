@@ -37,6 +37,9 @@ public class RegisterActivity extends Activity {
     // UI elements
     EditText txtName;
     EditText txtEmail;
+    EditText txtLoginID;
+    EditText txtPassword;
+    
      
     // Register button
     Button btnRegister;
@@ -67,9 +70,13 @@ public class RegisterActivity extends Activity {
             // stop executing code by return
              return;
         }
+        
+        //TODO:check if has Google Account???
          
         txtName = (EditText) findViewById(R.id.txtName);
         txtEmail = (EditText) findViewById(R.id.txtEmail);
+        txtLoginID = (EditText) findViewById(R.id.txtLoginID);
+        txtPassword = (EditText) findViewById(R.id.txtPassword);
         btnRegister = (Button) findViewById(R.id.btnRegister);
          
         /*
@@ -86,8 +93,7 @@ public class RegisterActivity extends Activity {
                 // Check if user filled the form
                 if(name.trim().length() > 0 && email.trim().length() > 0){
                     // Launch Main Activity
-                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                     
+                    Intent i = new Intent(getApplicationContext(), MainScreenActivity.class);
                     // Registering user on our server                   
                     // Sending registraiton details to MainActivity
                     i.putExtra("name", name);
