@@ -1,4 +1,4 @@
-package ca.utoronto.ece1778.baton.gcm.client.main;
+package ca.utoronto.ece1778.baton.temp;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -10,6 +10,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+import ca.utoronto.ece1778.baton.gcm.client.main.ConnectionDetector;
+import ca.utoronto.ece1778.baton.gcm.client.main.R;
+import ca.utoronto.ece1778.baton.gcm.client.main.R.id;
+import ca.utoronto.ece1778.baton.gcm.client.main.R.layout;
 import ca.utoronto.ece1778.baton.util.AlertDialogManager;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
 import ca.utoronto.ece1778.baton.util.ServerUtilities;

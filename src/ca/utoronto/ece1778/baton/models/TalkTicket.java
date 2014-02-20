@@ -1,4 +1,4 @@
-package ca.utoronto.ece1778.baton.gcm.client.main;
+package ca.utoronto.ece1778.baton.models;
 
 import java.sql.Timestamp;
 import java.util.HashMap;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ca.utoronto.ece1778.baton.gcm.client.main;
+package ca.utoronto.ece1778.baton.screens;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import ca.utoronto.ece1778.baton.gcm.client.main.ConnectionDetector;
+import ca.utoronto.ece1778.baton.gcm.client.main.R;
 import ca.utoronto.ece1778.baton.util.AlertDialogManager;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
 

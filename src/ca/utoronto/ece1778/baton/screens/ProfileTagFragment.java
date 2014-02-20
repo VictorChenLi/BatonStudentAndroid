@@ -1,10 +1,11 @@
-package ca.utoronto.ece1778.baton.gcm.client.main;
+package ca.utoronto.ece1778.baton.screens;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import ca.utoronto.ece1778.baton.gcm.client.main.R;
 
 
 public class ProfileTagFragment extends Fragment {

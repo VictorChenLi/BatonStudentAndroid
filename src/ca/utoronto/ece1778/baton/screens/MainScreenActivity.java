@@ -1,4 +1,4 @@
-package ca.utoronto.ece1778.baton.gcm.client.main;
+package ca.utoronto.ece1778.baton.screens;
 
 import java.util.Locale;
 
@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import ca.utoronto.ece1778.baton.gcm.client.main.R;
 
 
 public class MainScreenActivity extends FragmentActivity implements
