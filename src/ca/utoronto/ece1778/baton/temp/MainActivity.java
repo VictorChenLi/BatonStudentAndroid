@@ -10,13 +10,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
-import ca.utoronto.ece1778.baton.gcm.client.main.ConnectionDetector;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
 import ca.utoronto.ece1778.baton.gcm.client.main.R.id;
 import ca.utoronto.ece1778.baton.gcm.client.main.R.layout;
+import ca.utoronto.ece1778.baton.syncserver.BatonServerUtilities;
+import ca.utoronto.ece1778.baton.syncserver.InternetConnectionDetector;
 import ca.utoronto.ece1778.baton.util.AlertDialogManager;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
-import ca.utoronto.ece1778.baton.util.ServerUtilities;
 import ca.utoronto.ece1778.baton.util.WakeLocker;
 
 import com.google.android.gcm.GCMRegistrar;
@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
 	AlertDialogManager alert = new AlertDialogManager();
 
 	// Connection detector
-	ConnectionDetector cd;
+	InternetConnectionDetector cd;
 
 	public static String name;
 	public static String email;
@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		cd = new ConnectionDetector(getApplicationContext());
+		cd = new InternetConnectionDetector(getApplicationContext());
 
 		// Check if Internet present
 		if (!cd.isConnectingToInternet()) {
@@ -97,7 +97,7 @@ public class MainActivity extends Activity {
 					protected Void doInBackground(Void... params) {
 						// Register on our server
 						// On server creates a new user
-						ServerUtilities.register(context, name, email, regId);
+						BatonServerUtilities.register(context, name, email, regId);
 						return null;
 					}
 

@@ -1,4 +1,4 @@
-package ca.utoronto.ece1778.baton.util;
+package ca.utoronto.ece1778.baton.syncserver;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,12 +16,13 @@ import android.util.Log;
 
 import com.google.android.gcm.GCMRegistrar;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
+import ca.utoronto.ece1778.baton.util.CommonUtilities;
 
-public class ServerUtilities {
+public class BatonServerUtilities {
 	private static final int MAX_ATTEMPTS = 5;
 	private static final int BACKOFF_MILLI_SECONDS = 2000;
 	private static final Random random = new Random();
-	private static final String TAG = "ServerUtilities";
+	private static final String TAG = "BatonServerUtilities";
 
 	/**
 	 * Register this account/device pair within the server.

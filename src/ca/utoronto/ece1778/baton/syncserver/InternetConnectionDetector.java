@@ -1,14 +1,14 @@
-package ca.utoronto.ece1778.baton.gcm.client.main;
+package ca.utoronto.ece1778.baton.syncserver;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-public class ConnectionDetector {
+public class InternetConnectionDetector {
 	  
 	    private Context _context;
 	  
-	    public ConnectionDetector(Context context){
+	    public InternetConnectionDetector(Context context){
 	        this._context = context;
 	    }
 	  

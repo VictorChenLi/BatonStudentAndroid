@@ -21,8 +21,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import ca.utoronto.ece1778.baton.gcm.client.main.ConnectionDetector;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
+import ca.utoronto.ece1778.baton.syncserver.InternetConnectionDetector;
 import ca.utoronto.ece1778.baton.util.AlertDialogManager;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
 
@@ -34,7 +34,7 @@ public class RegisterActivity extends Activity {
     AlertDialogManager alert = new AlertDialogManager();
      
     // Internet detector
-    ConnectionDetector cd;
+    InternetConnectionDetector cd;
      
     // UI elements
     EditText txtName;
@@ -51,7 +51,7 @@ public class RegisterActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
          
-        cd = new ConnectionDetector(getApplicationContext());
+        cd = new InternetConnectionDetector(getApplicationContext());
  
         // Check if Internet present
         if (!cd.isConnectingToInternet()) {
