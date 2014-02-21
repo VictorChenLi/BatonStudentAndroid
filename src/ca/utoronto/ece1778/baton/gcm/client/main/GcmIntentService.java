@@ -22,7 +22,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import ca.utoronto.ece1778.baton.syncserver.BatonServerUtilities;
+import ca.utoronto.ece1778.baton.syncserver.BatonServerCommunicator;
 import ca.utoronto.ece1778.baton.temp.MainActivity;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
 
@@ -50,8 +50,8 @@ public class GcmIntentService extends GCMBaseIntentService {
     protected void onRegistered(Context context, String registrationId) {
         Log.i(TAG, "Device registered: regId = " + registrationId);
         CommonUtilities.displayMessage(context, "Your device registred with GCM");
-        Log.d("NAME", MainActivity.name);
-        BatonServerUtilities.register(context, MainActivity.name, MainActivity.email, registrationId);
+        //Log.d("NAME", MainActivity.name);
+        //BatonServerCommunicator.registerDevice(context, MainActivity.name, MainActivity.email, registrationId);
     }
  
     /**
@@ -61,7 +61,7 @@ public class GcmIntentService extends GCMBaseIntentService {
     protected void onUnregistered(Context context, String registrationId) {
         Log.i(TAG, "Device unregistered");
         CommonUtilities.displayMessage(context, getString(R.string.gcm_unregistered));
-        BatonServerUtilities.unregister(context, registrationId);
+        //BatonServerCommunicator.unregister(context, registrationId);
     }
  
     /**

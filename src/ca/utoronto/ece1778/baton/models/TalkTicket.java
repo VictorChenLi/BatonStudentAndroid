@@ -8,6 +8,11 @@ import org.json.simple.JSONObject;
 
 import ca.utoronto.ece1778.baton.util.Constants;
 
+/**
+ * 
+ * @author Yi Zhao
+ *
+ */
 public class TalkTicket{
    private Timestamp mTimestamp;
    private int mIntent;

@@ -14,6 +14,11 @@ import android.view.Menu;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
 
 
+/**
+ * 
+ * @author Yi Zhao
+ *
+ */
 public class MainScreenActivity extends FragmentActivity implements
 		ActionBar.TabListener {
 

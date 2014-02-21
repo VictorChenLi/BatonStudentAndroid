@@ -7,7 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
 
-
+/**
+ * 
+ * @author Yi Zhao
+ *
+ */
 public class ProfileTagFragment extends Fragment {
 	/**
 	 * The fragment argument representing the section number for this

@@ -13,13 +13,13 @@
          android:layout_marginTop="20dip"/>
 
      <SeekBar
-         android:id="@+id/seekBar1"
+         android:id="@+id/work_complexitySeekBar"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:max="10"
          android:progress="0" />
       
-     <Button android:id="@+id/btnTalk"
+     <Button android:id="@+id/work_btnTalk"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
          android:text="Send"

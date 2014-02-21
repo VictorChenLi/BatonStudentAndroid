@@ -12,7 +12,7 @@
          android:layout_marginRight="10dip"
          android:layout_marginTop="20dip"/>
       
-     <EditText android:id="@+id/txtName"
+     <EditText android:id="@+id/profile_txtName"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
          android:layout_margin="10dip"
@@ -24,7 +24,7 @@
          android:layout_marginLeft="10dip"
          android:layout_marginRight="10dip"/>
       
-     <EditText android:id="@+id/txtLoginID"
+     <EditText android:id="@+id/profile_txtLoginID"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
          android:layout_margin="10dip"
@@ -36,7 +36,7 @@
          android:layout_marginLeft="10dip"
          android:layout_marginRight="10dip"/>
       
-     <EditText android:id="@+id/txtEmail"
+     <EditText android:id="@+id/profile_txtEmail"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
          android:layout_margin="10dip"
@@ -48,14 +48,14 @@
          android:layout_marginLeft="10dip"
          android:layout_marginRight="10dip"/>
       
-     <EditText android:id="@+id/txtPassword"
+     <EditText android:id="@+id/profile_txtPassword"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
          android:inputType="textPassword" 
          android:layout_margin="10dip"
          android:layout_marginBottom="20dip"/>
       
-     <Button android:id="@+id/btnConfirm"
+     <Button android:id="@+id/profile_btnConfirm"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
          android:text="Confirm"

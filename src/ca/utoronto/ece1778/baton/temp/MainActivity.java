@@ -13,7 +13,7 @@ import android.widget.Toast;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
 import ca.utoronto.ece1778.baton.gcm.client.main.R.id;
 import ca.utoronto.ece1778.baton.gcm.client.main.R.layout;
-import ca.utoronto.ece1778.baton.syncserver.BatonServerUtilities;
+import ca.utoronto.ece1778.baton.syncserver.BatonServerCommunicator;
 import ca.utoronto.ece1778.baton.syncserver.InternetConnectionDetector;
 import ca.utoronto.ece1778.baton.util.AlertDialogManager;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
@@ -21,6 +21,11 @@ import ca.utoronto.ece1778.baton.util.WakeLocker;
 
 import com.google.android.gcm.GCMRegistrar;
 
+/**
+ * 
+ * @deprecated
+ *
+ */
 public class MainActivity extends Activity {
 	// label to display gcm messages
 	TextView lblMessage;
@@ -97,7 +102,7 @@ public class MainActivity extends Activity {
 					protected Void doInBackground(Void... params) {
 						// Register on our server
 						// On server creates a new user
-						BatonServerUtilities.register(context, name, email, regId);
+						//BatonServerCommunicator.register(context, name, email, regId);
 						return null;
 					}
 

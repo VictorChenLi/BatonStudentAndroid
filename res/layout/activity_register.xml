@@ -3,62 +3,127 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >    
-      
-     <TextView android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="Full Name:"
-         android:layout_marginLeft="10dip"
-         android:layout_marginRight="10dip"
-         android:layout_marginTop="20dip"/>
-      
-     <EditText android:id="@+id/txtName"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:layout_margin="10dip"
-         android:layout_marginBottom="20dip"/>
-     
-      <TextView android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="Unique Login ID:"
-         android:layout_marginLeft="10dip"
-         android:layout_marginRight="10dip"/>
-      
-     <EditText android:id="@+id/txtLoginID"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:layout_margin="10dip"
-         android:layout_marginBottom="20dip"/>
-      
-     <TextView android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="Email:"
-         android:layout_marginLeft="10dip"
-         android:layout_marginRight="10dip"/>
-      
-     <EditText android:id="@+id/txtEmail"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:layout_margin="10dip"
-         android:layout_marginBottom="20dip"/>
-     
-     <TextView android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="Password:"
-         android:layout_marginLeft="10dip"
-         android:layout_marginRight="10dip"/>
-      
-     <EditText android:id="@+id/txtPassword"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:inputType="textPassword" 
-         android:layout_margin="10dip"
-         android:layout_marginBottom="20dip"/>
-      
-     <Button android:id="@+id/btnRegister"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="Register"
-         android:layout_margin="10dip"/>
+    android:orientation="vertical" 
+    android:weightSum="12">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="horizontal"
+        android:weightSum="4" >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical" 
+            android:layout_weight="2"
+            android:weightSum="4">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="20dip"
+                android:text="First Name:" />
+
+            <EditText
+                android:id="@+id/register_txtFirstName"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:layout_marginBottom="20dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical" 
+            android:layout_weight="4"
+            android:weightSum="4">
+
+            <TextView
+                android:layout_width="fill_parent"
+                   android:layout_height="0dp"
+                android:layout_weight="2"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="20dip"
+                android:text="Last Name:" />
+
+            <EditText
+                android:id="@+id/register_txtLastName"
+                android:layout_width="fill_parent"
+                  android:layout_height="0dp"
+                android:layout_weight="2"
+                android:layout_marginBottom="20dip" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:text="Unique Login ID:" />
+
+    <EditText
+        android:id="@+id/register_txtLoginID"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="10dip"
+        android:layout_marginBottom="20dip" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:text="Email:" />
+
+    <EditText
+        android:id="@+id/register_txtEmail"
+        android:layout_width="fill_parent"
+       android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="10dip"
+        android:layout_marginBottom="20dip" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:text="Password:" />
+
+    <EditText
+        android:id="@+id/register_txtPassword"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="10dip"
+        android:layout_marginBottom="20dip"
+        android:inputType="textPassword" />
+
+    
+        <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"/>
+        
+    <Button
+        android:id="@+id/register_btnRegister"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:text="Register" />
 
 </LinearLayout>

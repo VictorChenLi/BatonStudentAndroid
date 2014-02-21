@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,44 +14,62 @@ import java.util.Random;
 
 import android.content.Context;
 import android.util.Log;
-
-import com.google.android.gcm.GCMRegistrar;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
+import ca.utoronto.ece1778.baton.models.StudentProfile;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
 
-public class BatonServerUtilities {
+import com.google.android.gcm.GCMRegistrar;
+
+/**
+ * 
+ * @author Yi Zhao
+ *
+ */
+public class BatonServerCommunicator {
 	private static final int MAX_ATTEMPTS = 5;
 	private static final int BACKOFF_MILLI_SECONDS = 2000;
 	private static final Random random = new Random();
-	private static final String TAG = "BatonServerUtilities";
+	private static final String TAG = "BatonServerCommunicator";
+	
+	/** string for communication with sync server as a parameter name */
+	private static final String POST_CLASSROOM = "classroom";
+	
+	public static final String REPLY_MESSAGE_REGISTER_SUCCESS = "register_success";
+	public static final String REPLY_MESSAGE_REGISTER_FAIL = "register_fail";
+	public static final String REPLY_MESSAGE_LOGIN_SUCCESS = "login_success";
+	public static final String REPLY_MESSAGE_LOGIN_FAIL = "login_fail";
+	
 
 	/**
-	 * Register this account/device pair within the server.
-	 * 
+	 * Register user on the server.
 	 */
-	public static void register(final Context context, String name, String email,
-			final String regId) {
-		Log.i(TAG, "registering device (regId = " + regId + ")");
+	public static String register(final Context context,final StudentProfile user) {
+		Log.i(TAG, "registering user:");
+		Log.i(TAG, user.toString());
+		
 		String serverUrl = CommonUtilities.SERVER_URL + "/register?";
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("regId", regId);
-		//params.put("name", name);
-		//params.put("email", email);
+		params.put(StudentProfile.POST_GCM_ID, user.getGcm_id());
+		params.put(StudentProfile.POST_EMAIL, user.getEmail());
+		params.put(StudentProfile.POST_FIRST_NAME, user.getFirstName());
+		params.put(StudentProfile.POST_LAST_NAME, user.getLastName());
+		params.put(StudentProfile.POST_LOGIN_ID,user.getLoginID());
+		params.put(StudentProfile.POST_PASSWORD, user.getPassword());
 
 		long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
-		// Once GCM returns a registration id, we need to register on our server
 		// As the server might be down, we will retry it a couple
 		// times.
 		for (int i = 1; i <= MAX_ATTEMPTS; i++) {
 			Log.d(TAG, "Attempt #" + i + " to register");
 			try {
-				CommonUtilities.displayMessage(context, context.getString(
-						R.string.server_registering, i, MAX_ATTEMPTS));
+				/*CommonUtilities.displayMessage(context, context.getString(
+						R.string.server_registering, i, MAX_ATTEMPTS));*/
 				post(serverUrl, params);
 				GCMRegistrar.setRegisteredOnServer(context, true);
 				String message = context.getString(R.string.server_registered);
 				CommonUtilities.displayMessage(context, message);
-				return;
+				Log.i(TAG, "register success");
+				return REPLY_MESSAGE_REGISTER_SUCCESS;
 			} catch (IOException e) {
 				// Here we are simplifying and retrying on any error; in a real
 				// application, it should retry only on unrecoverable errors
@@ -66,7 +85,7 @@ public class BatonServerUtilities {
 					// Activity finished before we complete - exit.
 					Log.d(TAG, "Thread interrupted: abort remaining retries!");
 					Thread.currentThread().interrupt();
-					return;
+					return REPLY_MESSAGE_REGISTER_FAIL;
 				}
 				// increase backoff exponentially
 				backoff *= 2;
@@ -75,16 +94,72 @@ public class BatonServerUtilities {
 		String message = context.getString(R.string.server_register_error,
 				MAX_ATTEMPTS);
 		CommonUtilities.displayMessage(context, message);
+		return REPLY_MESSAGE_REGISTER_FAIL;
+	}
+	
+	/**
+	 * Login user on the server.
+	 */
+	public static String login(final Context context,final String[] token) {
+		Log.i(TAG, "Login user:");
+		Log.i(TAG, Arrays.toString(token));
+		
+		String serverUrl = CommonUtilities.SERVER_URL + "/login?";
+		Map<String, String> params = new HashMap<String, String>();
+		params.put(StudentProfile.POST_EMAIL, token[0]);
+		params.put(POST_CLASSROOM, token[1]);
+		params.put(StudentProfile.POST_PASSWORD, token[2]);
+		params.put(StudentProfile.POST_GCM_ID, GCMRegistrar.getRegistrationId(context));
+
+		long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
+		// As the server might be down, we will retry it a couple
+		// times.
+		for (int i = 1; i <= MAX_ATTEMPTS; i++) {
+			Log.d(TAG, "Attempt #" + i + " to register");
+			try {
+				/*CommonUtilities.displayMessage(context, context.getString(
+						R.string.server_registering, i, MAX_ATTEMPTS));*/
+				post(serverUrl, params);
+				//String message = context.getString(R.string.server_registered);
+				//CommonUtilities.displayMessage(context, message);
+				Log.i(TAG, "login success");
+				return REPLY_MESSAGE_LOGIN_SUCCESS;
+			} catch (IOException e) {
+				// Here we are simplifying and retrying on any error; in a real
+				// application, it should retry only on unrecoverable errors
+				// (like HTTP error code 503).
+				Log.e(TAG, "Failed to register on attempt " + i + ":" + e);
+				if (i == MAX_ATTEMPTS) {
+					break;
+				}
+				try {
+					Log.d(TAG, "Sleeping for " + backoff + " ms before retry");
+					Thread.sleep(backoff);
+				} catch (InterruptedException e1) {
+					// Activity finished before we complete - exit.
+					Log.d(TAG, "Thread interrupted: abort remaining retries!");
+					Thread.currentThread().interrupt();
+					return REPLY_MESSAGE_LOGIN_FAIL;
+				}
+				// increase backoff exponentially
+				backoff *= 2;
+			}
+		}
+		String message = context.getString(R.string.server_register_error,
+				MAX_ATTEMPTS);
+		CommonUtilities.displayMessage(context, message);
+		return REPLY_MESSAGE_LOGIN_FAIL;
 	}
 
 	/**
 	 * Unregister this account/device pair within the server.
 	 */
-	public static void unregister(final Context context, final String regId) {
-		Log.i(TAG, "unregistering device (regId = " + regId + ")");
+	public static void unregister(final Context context, final StudentProfile user) {
+		Log.i(TAG, "unregistering user");
 		String serverUrl = CommonUtilities.SERVER_URL + "/unregister?";
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("regId", regId);
+		params.put(StudentProfile.POST_GCM_ID, user.getGcm_id());
+		params.put(StudentProfile.POST_EMAIL, user.getEmail());
 		try {
 			post(serverUrl, params);
 			GCMRegistrar.setRegisteredOnServer(context, false);
