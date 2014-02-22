@@ -22,6 +22,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -65,6 +66,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		//Log.i(TAG, "RegisterActivity onCreate called");
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_register);
 
 		cd = new InternetConnectionDetector(getApplicationContext());
