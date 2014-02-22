@@ -21,7 +21,7 @@ public class StudentProfile {
 	/** string for communication with sync server as a parameter name */
 	public static final String POST_PASSWORD = "password";
 	/** string for communication with sync server as a parameter name */
-	public static final String POST_GCM_ID = "regid";
+	public static final String POST_GCM_ID = "gcm_regid";
 
 	private String firstName = "";
 	private String lastName = "";
@@ -56,7 +56,7 @@ public class StudentProfile {
 	public String toString() {
 		return "user: " + this.firstName + " " + this.lastName + ", "
 				+ this.loginID + ", " + this.email + ", " + this.password_md5
-				+ ", \n regid:" + this.gcm_id;
+				+ ", \n gcm_regid:" + this.gcm_id;
 	}
 
 	public String getRegisterParameter() {
@@ -66,7 +66,7 @@ public class StudentProfile {
 	}
 
 	public String getLoginParameter() {
-		return "regId=" + this.gcm_id + "&email=" + this.email + "&password="
+		return "gcm_regid=" + this.gcm_id + "&email=" + this.email + "&password="
 				+ this.password_md5;
 	}
 
