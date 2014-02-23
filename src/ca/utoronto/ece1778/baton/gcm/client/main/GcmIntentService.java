@@ -16,15 +16,10 @@
 
 package ca.utoronto.ece1778.baton.gcm.client.main;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import ca.utoronto.ece1778.baton.syncserver.BatonServerCommunicator;
-import ca.utoronto.ece1778.baton.temp.MainActivity;
-import ca.utoronto.ece1778.baton.util.CommonUtilities;
+import ca.utoronto.ece1778.baton.util.Constants;
 
 import com.google.android.gcm.GCMBaseIntentService;
 
@@ -40,7 +35,7 @@ public class GcmIntentService extends GCMBaseIntentService {
     private static final String TAG = "GCMIntentService";
  
     public GcmIntentService() {
-        super(CommonUtilities.SENDER_ID);
+        super(Constants.SENDER_ID);
     }
  
     /**
@@ -49,7 +44,7 @@ public class GcmIntentService extends GCMBaseIntentService {
     @Override
     protected void onRegistered(Context context, String registrationId) {
         Log.i(TAG, "Device registered: regId = " + registrationId);
-        CommonUtilities.displayMessage(context, "Your device registred with GCM");
+       // CommonUtilities.displayMessage(context, "Your device registred with GCM");
         //Log.d("NAME", MainActivity.name);
         //BatonServerCommunicator.registerDevice(context, MainActivity.name, MainActivity.email, registrationId);
     }
@@ -60,7 +55,7 @@ public class GcmIntentService extends GCMBaseIntentService {
     @Override
     protected void onUnregistered(Context context, String registrationId) {
         Log.i(TAG, "Device unregistered");
-        CommonUtilities.displayMessage(context, getString(R.string.gcm_unregistered));
+       // CommonUtilities.displayMessage(context, getString(R.string.gcm_unregistered));
         //BatonServerCommunicator.unregister(context, registrationId);
     }
  
@@ -70,11 +65,11 @@ public class GcmIntentService extends GCMBaseIntentService {
     @Override
     protected void onMessage(Context context, Intent intent) {
         Log.i(TAG, "onMessage called");
-        String message = intent.getExtras().getString(CommonUtilities.EXTRA_MESSAGE);
+        //String message = intent.getExtras().getString(CommonUtilities.EXTRA_MESSAGE);
          
-        CommonUtilities.displayMessage(context, message);
+       // CommonUtilities.displayMessage(context, message);
         // notifies user
-        generateNotification(context, message);
+       // generateNotification(context, message);
     }
  
     /**
@@ -84,9 +79,9 @@ public class GcmIntentService extends GCMBaseIntentService {
     protected void onDeletedMessages(Context context, int total) {
         Log.i(TAG, "Received deleted messages notification");
         String message = getString(R.string.gcm_deleted, total);
-        CommonUtilities.displayMessage(context, message);
+        //CommonUtilities.displayMessage(context, message);
         // notifies user
-        generateNotification(context, message);
+        //generateNotification(context, message);
     }
  
     /**
@@ -95,22 +90,22 @@ public class GcmIntentService extends GCMBaseIntentService {
     @Override
     public void onError(Context context, String errorId) {
         Log.i(TAG, "Received error: " + errorId);
-        CommonUtilities.displayMessage(context, getString(R.string.gcm_error, errorId));
+        //CommonUtilities.displayMessage(context, getString(R.string.gcm_error, errorId));
     }
  
     @Override
     protected boolean onRecoverableError(Context context, String errorId) {
         // log message
         Log.i(TAG, "Received recoverable error: " + errorId);
-        CommonUtilities.displayMessage(context, getString(R.string.gcm_recoverable_error,
-                errorId));
+        /*CommonUtilities.displayMessage(context, getString(R.string.gcm_recoverable_error,
+                errorId));*/
         return super.onRecoverableError(context, errorId);
     }
  
     /**
      * Issues a notification to inform the user that server has sent a message.
      */
-    private static void generateNotification(Context context, String message) {
+    /*private static void generateNotification(Context context, String message) {
         int icon = R.drawable.ic_launcher;
         long when = System.currentTimeMillis();
         NotificationManager notificationManager = (NotificationManager)
@@ -135,6 +130,6 @@ public class GcmIntentService extends GCMBaseIntentService {
         notification.defaults |= Notification.DEFAULT_VIBRATE;
         notificationManager.notify(0, notification);      
  
-    }
+    }*/
  
 }

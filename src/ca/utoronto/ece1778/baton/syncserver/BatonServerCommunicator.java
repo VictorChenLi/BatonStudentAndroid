@@ -17,6 +17,7 @@ import android.util.Log;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
 import ca.utoronto.ece1778.baton.models.StudentProfile;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
+import ca.utoronto.ece1778.baton.util.Constants;
 
 import com.google.android.gcm.GCMRegistrar;
 
@@ -47,7 +48,7 @@ public class BatonServerCommunicator {
 		Log.i(TAG, "registering user:");
 		Log.i(TAG, user.toString());
 		
-		String serverUrl = CommonUtilities.SERVER_URL + "/register?";
+		String serverUrl = Constants.SERVER_URL + "/register?";
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(StudentProfile.POST_GCM_ID, user.getGcm_id());
 		params.put(StudentProfile.POST_EMAIL, user.getEmail());
@@ -67,7 +68,7 @@ public class BatonServerCommunicator {
 				post(serverUrl, params);
 				GCMRegistrar.setRegisteredOnServer(context, true);
 				String message = context.getString(R.string.server_registered);
-				CommonUtilities.displayMessage(context, message);
+				//CommonUtilities.displayMessage(context, message);
 				Log.i(TAG, "register success");
 				return REPLY_MESSAGE_REGISTER_SUCCESS;
 			} catch (IOException e) {
@@ -93,7 +94,7 @@ public class BatonServerCommunicator {
 		}
 		String message = context.getString(R.string.server_register_error,
 				MAX_ATTEMPTS);
-		CommonUtilities.displayMessage(context, message);
+		//CommonUtilities.displayMessage(context, message);
 		return REPLY_MESSAGE_REGISTER_FAIL;
 	}
 	
@@ -104,7 +105,7 @@ public class BatonServerCommunicator {
 		Log.i(TAG, "Login user:");
 		Log.i(TAG, Arrays.toString(token));
 		
-		String serverUrl = CommonUtilities.SERVER_URL + "/login?";
+		String serverUrl = Constants.SERVER_URL + "/login?";
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(StudentProfile.POST_EMAIL, token[0]);
 		params.put(POST_CLASSROOM, token[1]);
@@ -147,7 +148,7 @@ public class BatonServerCommunicator {
 		}
 		String message = context.getString(R.string.server_register_error,
 				MAX_ATTEMPTS);
-		CommonUtilities.displayMessage(context, message);
+		//CommonUtilities.displayMessage(context, message);
 		return REPLY_MESSAGE_LOGIN_FAIL;
 	}
 
@@ -156,7 +157,7 @@ public class BatonServerCommunicator {
 	 */
 	public static void unregister(final Context context, final StudentProfile user) {
 		Log.i(TAG, "unregistering user");
-		String serverUrl = CommonUtilities.SERVER_URL + "/unregister?";
+		String serverUrl = Constants.SERVER_URL + "/unregister?";
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(StudentProfile.POST_GCM_ID, user.getGcm_id());
 		params.put(StudentProfile.POST_EMAIL, user.getEmail());
@@ -164,7 +165,7 @@ public class BatonServerCommunicator {
 			post(serverUrl, params);
 			GCMRegistrar.setRegisteredOnServer(context, false);
 			String message = context.getString(R.string.server_unregistered);
-			CommonUtilities.displayMessage(context, message);
+			//CommonUtilities.displayMessage(context, message);
 		} catch (IOException e) {
 			// At this point the device is unregistered from GCM, but still
 			// registered in the server.
@@ -173,7 +174,7 @@ public class BatonServerCommunicator {
 			// a "NotRegistered" error message and should unregister the device.
 			String message = context.getString(
 					R.string.server_unregister_error, e.getMessage());
-			CommonUtilities.displayMessage(context, message);
+			//CommonUtilities.displayMessage(context, message);
 		}
 	}
 

@@ -9,7 +9,7 @@ import android.widget.Toast;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
 import ca.utoronto.ece1778.baton.syncserver.InternetConnectionDetector;
 import ca.utoronto.ece1778.baton.util.AlertDialogManager;
-import ca.utoronto.ece1778.baton.util.CommonUtilities;
+import ca.utoronto.ece1778.baton.util.Constants;
 
 import com.google.android.gcm.GCMRegistrar;
 
@@ -57,10 +57,10 @@ public class WelcomeActivity extends Activity {
 		
 
 		// Check if GCM configuration is set
-		if (CommonUtilities.SERVER_URL == null
-				|| CommonUtilities.SENDER_ID == null
-				|| CommonUtilities.SERVER_URL.length() == 0
-				|| CommonUtilities.SENDER_ID.length() == 0) {
+		if (Constants.SERVER_URL == null
+				|| Constants.SENDER_ID == null
+				|| Constants.SERVER_URL.length() == 0
+				|| Constants.SENDER_ID.length() == 0) {
 			// GCM sernder id / server url is missing
 			alert.showAlertDialog(WelcomeActivity.this, "Configuration Error!",
 					"Please set your Server URL and GCM Sender ID", false);
@@ -86,7 +86,7 @@ public class WelcomeActivity extends Activity {
 		// Check if regid already presents
 		if (regId.equals("")) {
 			// Registration is not present, register now with GCM
-			GCMRegistrar.register(this, CommonUtilities.SENDER_ID);
+			GCMRegistrar.register(this, Constants.SENDER_ID);
 		} else {
 			Toast.makeText(getApplicationContext(),
 					"device ready", Toast.LENGTH_SHORT).show();

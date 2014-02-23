@@ -1,6 +1,11 @@
 package ca.utoronto.ece1778.baton.util;
 
 public final class Constants {
+	/**Baton sync server url */
+	public static final String SERVER_URL = "http://54.213.105.123:8080/BatonSyncServer";
+	/**Baton Google project id*/
+	public static final String SENDER_ID = "553157495789";
+	
 	public final static int TALK_INTENT_BUILD = 0x0001;
 	public final static int TALK_INTENT_CHALLENGE = 0x0002;
 	public final static int TALK_INTENT_QUESTION = 0x0003;
