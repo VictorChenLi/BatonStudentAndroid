@@ -12,11 +12,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
 import ca.utoronto.ece1778.baton.models.StudentProfile;
-import ca.utoronto.ece1778.baton.util.CommonUtilities;
 import ca.utoronto.ece1778.baton.util.Constants;
 
 import com.google.android.gcm.GCMRegistrar;
@@ -176,6 +176,11 @@ public class BatonServerCommunicator {
 					R.string.server_unregister_error, e.getMessage());
 			//CommonUtilities.displayMessage(context, message);
 		}
+	}
+
+	public static String sendTalkIntent(Activity context, String intent) {
+		// TODO send intent to sync server here
+		return null;
 	}
 
 	/**

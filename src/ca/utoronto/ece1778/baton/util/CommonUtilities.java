@@ -40,7 +40,7 @@ public class CommonUtilities {
 	 * @return MD5 of str
 	 */
 	public static String getMD5Str(String str) {
-		//TODO
+		//TODO password MD5
 		return str;
 	}
 

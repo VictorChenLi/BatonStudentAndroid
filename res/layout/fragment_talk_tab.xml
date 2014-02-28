@@ -5,24 +5,117 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >    
       
-     <TextView android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="Participant Intent:"
-         android:layout_marginLeft="10dip"
-         android:layout_marginRight="10dip"
-         android:layout_marginTop="20dip"/>
 
-     <Spinner
-         android:id="@+id/talk_intent"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content" 
-         android:entries="@array/intent_array"/>
-     
-      
-     <Button android:id="@+id/talk_btnTalk"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         android:text="Talk"
-         android:layout_margin="10dip"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="horizontal"
+        android:weightSum="4" >
+    </LinearLayout>
+
+   
+
+    <!-- name -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="horizontal"
+        android:weightSum="7" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+         <Button
+            android:id="@+id/talk_btnBuild"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_margin="5dip"
+            android:layout_weight="5"
+            android:text = "Build"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="horizontal"
+        android:weightSum="7" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="4" />
+
+        <Button
+            android:id="@+id/talk_btnQuestion"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_margin="5dip"
+            android:layout_weight="5"
+            android:text = "Question"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="horizontal"
+        android:weightSum="7" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="4" />
+
+       <Button
+            android:id="@+id/talk_btnChallenge"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_margin="5dip"
+            android:layout_weight="5"
+            android:text = "Challenge"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="horizontal"
+        android:weightSum="7" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="4" />
+        <Button
+            android:id="@+id/talk_btnNew"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_margin="5dip"
+            android:layout_weight="5"
+            android:text = "New Ideas"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="horizontal"
+        android:weightSum="4" >
+
+        
+    </LinearLayout>
+
 
 </LinearLayout>

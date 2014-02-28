@@ -22,7 +22,7 @@ import com.google.android.gcm.GCMRegistrar;
  * 
  */
 
-//TODO: change to use AsyncTask and progress bar
+//TODO: need to change to use AsyncTask and progress bar
 public class WelcomeActivity extends Activity {
 	// label to display gcm messages
 	TextView lblMessage;
