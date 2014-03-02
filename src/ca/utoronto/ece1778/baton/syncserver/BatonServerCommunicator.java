@@ -17,6 +17,8 @@ import android.content.Context;
 import android.util.Log;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
 import ca.utoronto.ece1778.baton.models.StudentProfile;
+import ca.utoronto.ece1778.baton.models.Ticket;
+import ca.utoronto.ece1778.baton.util.CommonUtilities;
 import ca.utoronto.ece1778.baton.util.Constants;
 
 import com.google.android.gcm.GCMRegistrar;
@@ -56,6 +58,7 @@ public class BatonServerCommunicator {
 		params.put(StudentProfile.POST_LAST_NAME, user.getLastName());
 		params.put(StudentProfile.POST_LOGIN_ID,user.getLoginID());
 		params.put(StudentProfile.POST_PASSWORD, user.getPassword());
+		params.put(StudentProfile.POST_USER_TYPE, "Student");
 
 		long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
 		// As the server might be down, we will retry it a couple
@@ -178,9 +181,24 @@ public class BatonServerCommunicator {
 		}
 	}
 
-	public static String sendTalkIntent(Activity context, String intent) {
-		// TODO send intent to sync server here
-		return null;
+	public static Boolean sendTalkIntent(Activity context, String intent) {
+		Log.i(TAG, "Send Ticket:");
+		Log.i(TAG, intent);
+		String serverUrl = Constants.SERVER_URL + "/sendTicket?";
+		Map<String, String> params = new HashMap<String, String>();
+		String gcm_regId = CommonUtilities.getGlobalVar(context, StudentProfile.POST_GCM_ID);
+		params.put(StudentProfile.POST_GCM_ID, gcm_regId);
+		params.put(Ticket.POST_TICKET_CONTENT, intent);
+		params.put(Ticket.POST_TICKET_TYPE, Constants.TALK_TICKET_TYPE);
+		params.put(Ticket.POST_TIME_STAMP, CommonUtilities.getStrTimeFromMillis(System.currentTimeMillis()));
+		try {
+			post(serverUrl, params);
+			return true;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	/**

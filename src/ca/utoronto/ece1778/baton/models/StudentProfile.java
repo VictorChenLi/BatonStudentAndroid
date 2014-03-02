@@ -22,6 +22,7 @@ public class StudentProfile {
 	public static final String POST_PASSWORD = "password";
 	/** string for communication with sync server as a parameter name */
 	public static final String POST_GCM_ID = "gcm_regid";
+	public static final String POST_USER_TYPE ="userType";
 
 	private String firstName = "";
 	private String lastName = "";

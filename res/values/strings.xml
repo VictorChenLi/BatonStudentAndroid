@@ -21,6 +21,8 @@
     <string name="server_unregistered">From Baton Server: successfully removed device!</string>
     <string name="server_register_error">Could not register device on Baton Server after %1$d attempts.</string>
     <string name="server_unregister_error">Could not unregister device on Baton Server (%1$s).</string>
+    <string name="server_sendticket_success">Teacher has received you request.</string>
+    <string name="server_sendticket_error">The request send failed, try it again!.</string>
     <string name="options_register">Register</string>
     <string name="options_unregister">Unregister</string>
     <string name="options_clear">Clear</string>

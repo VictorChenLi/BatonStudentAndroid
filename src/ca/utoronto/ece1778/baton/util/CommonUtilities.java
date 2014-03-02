@@ -1,9 +1,15 @@
 package ca.utoronto.ece1778.baton.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+import ca.utoronto.ece1778.baton.models.StudentProfile;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-/**@deprecated
+/**
  *
  */
 public class CommonUtilities {
@@ -43,5 +49,24 @@ public class CommonUtilities {
 		//TODO password MD5
 		return str;
 	}
-
+	
+	public static String getGlobalVar(Activity context,String key)
+	{
+		GlobalApplication global = (GlobalApplication) context.getApplication();
+		return global.get(key);
+	}
+	
+	public static void putGlobalVar(Activity context,String key, String value)
+	{
+		GlobalApplication global = (GlobalApplication) context.getApplication();
+		global.put(key, value);
+	}
+	
+	public static String getStrTimeFromMillis(long date)
+	{
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(date);
+		SimpleDateFormat myFormat = new SimpleDateFormat(Constants.DATE_FORMAT_LONG); 
+		return myFormat.format(c.getTime());
+	}
 }

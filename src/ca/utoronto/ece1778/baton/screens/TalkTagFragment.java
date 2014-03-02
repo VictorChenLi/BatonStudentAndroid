@@ -87,7 +87,7 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 	 * information that is passed when the task is completed to the post-task
 	 * code
 	 */
-	class AsyncSendTalkTicketTask extends AsyncTask<String, Void, String> {
+	class AsyncSendTalkTicketTask extends AsyncTask<String, Void, Boolean> {
 		@Override
 		protected void onPreExecute() {
 			mProgress.setMessage("Sending to teacher...");
@@ -98,11 +98,9 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 		}
 
 		@Override
-		protected String doInBackground(String... intent) {
+		protected Boolean doInBackground(String... intent) {
 			// TODO: implement sendTalkIntent in BatonServerCommunicator, and assign "result" with the feedback message to student
-			String result = BatonServerCommunicator.sendTalkIntent(
-					getActivity(), intent[0]);
-			return result;
+			return BatonServerCommunicator.sendTalkIntent(getActivity(), intent[0]);
 		}
 
 		@Override
@@ -110,9 +108,12 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(Boolean result) {
 			mProgress.dismiss();
-			Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+			if(true==result)
+				Toast.makeText(getActivity(), R.string.server_sendticket_success, Toast.LENGTH_SHORT).show();
+			else
+				Toast.makeText(getActivity(), R.string.server_sendticket_error, Toast.LENGTH_SHORT).show();
 		}
 	}
 }
