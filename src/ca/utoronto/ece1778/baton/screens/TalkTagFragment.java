@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
+import ca.utoronto.ece1778.baton.models.StudentProfile;
 import ca.utoronto.ece1778.baton.syncserver.BatonServerCommunicator;
+import ca.utoronto.ece1778.baton.util.CommonUtilities;
 import ca.utoronto.ece1778.baton.util.Constants;
 
 /**
@@ -58,6 +61,8 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		String intentMessage = null;
+		String email = CommonUtilities.getGlobalVar(getActivity(), StudentProfile.POST_EMAIL);
+		Log.i("TalkTagFragment","send ticket with email:"+email);
 		switch (v.getId()) {
 		case R.id.talk_btnBuild:
 			intentMessage = Constants.TALK_INTENT_BUILD;
@@ -77,7 +82,7 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 					"Please choose your paticipate intent", Toast.LENGTH_SHORT)
 					.show();
 		}
-		new AsyncSendTalkTicketTask().execute(new String[] { intentMessage });
+		new AsyncSendTalkTicketTask().execute(new String[] { intentMessage,email });
 	}
 
 	/*
@@ -100,7 +105,7 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 		@Override
 		protected Boolean doInBackground(String... intent) {
 			// TODO: implement sendTalkIntent in BatonServerCommunicator, and assign "result" with the feedback message to student
-			return BatonServerCommunicator.sendTalkIntent(getActivity(), intent[0]);
+			return BatonServerCommunicator.sendTalkIntent(getActivity(), intent);
 		}
 
 		@Override

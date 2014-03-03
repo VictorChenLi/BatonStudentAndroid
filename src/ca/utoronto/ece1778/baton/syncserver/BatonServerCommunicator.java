@@ -20,6 +20,7 @@ import ca.utoronto.ece1778.baton.models.StudentProfile;
 import ca.utoronto.ece1778.baton.models.Ticket;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
 import ca.utoronto.ece1778.baton.util.Constants;
+import ca.utoronto.ece1778.baton.util.GlobalApplication;
 
 import com.google.android.gcm.GCMRegistrar;
 
@@ -181,14 +182,16 @@ public class BatonServerCommunicator {
 		}
 	}
 
-	public static Boolean sendTalkIntent(Activity context, String intent) {
+	public static Boolean sendTalkIntent(Activity context, String[] intent) {
 		Log.i(TAG, "Send Ticket:");
-		Log.i(TAG, intent);
+		Log.i(TAG, intent[0]);
+		Log.i(TAG, intent[1]);
 		String serverUrl = Constants.SERVER_URL + "/sendTicket?";
 		Map<String, String> params = new HashMap<String, String>();
 		String gcm_regId = CommonUtilities.getGlobalVar(context, StudentProfile.POST_GCM_ID);
 		params.put(StudentProfile.POST_GCM_ID, gcm_regId);
-		params.put(Ticket.POST_TICKET_CONTENT, intent);
+		params.put(StudentProfile.POST_EMAIL, intent[1]);
+		params.put(Ticket.POST_TICKET_CONTENT, intent[0]);
 		params.put(Ticket.POST_TICKET_TYPE, Constants.TALK_TICKET_TYPE);
 		params.put(Ticket.POST_TIME_STAMP, CommonUtilities.getStrTimeFromMillis(System.currentTimeMillis()));
 		try {

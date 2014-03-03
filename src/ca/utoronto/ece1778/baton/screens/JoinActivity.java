@@ -30,6 +30,7 @@ import ca.utoronto.ece1778.baton.gcm.client.main.R;
 import ca.utoronto.ece1778.baton.models.StudentProfile;
 import ca.utoronto.ece1778.baton.syncserver.BatonServerCommunicator;
 import ca.utoronto.ece1778.baton.util.AlertDialogManager;
+import ca.utoronto.ece1778.baton.util.CommonUtilities;
 
 /**
  * Join page
@@ -86,6 +87,7 @@ public class JoinActivity extends Activity implements OnClickListener {
 			String email = txtEmail.getText().toString();
 			String classroom = txtClassroom.getText().toString();
 			String password = txtPassword.getText().toString();
+			CommonUtilities.putGlobalVar(this, StudentProfile.POST_EMAIL, email);
 			// Check if user filled the form
 			if (email.trim().length() > 0 && password.trim().length() > 0
 					&& classroom.trim().length() > 0) {
