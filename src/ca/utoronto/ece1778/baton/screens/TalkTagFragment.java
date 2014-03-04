@@ -1,6 +1,7 @@
 package ca.utoronto.ece1778.baton.screens;
 
 import android.app.ProgressDialog;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
@@ -47,6 +49,15 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 		btnQuestion = (Button) rootView.findViewById(R.id.talk_btnQuestion);
 		btnChallenge = (Button) rootView.findViewById(R.id.talk_btnChallenge);
 		btnNewIdeas = (Button) rootView.findViewById(R.id.talk_btnNew);
+		
+		Typeface tf1 = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFACE_ACTION_MAN_BOLD);
+		btnBuild.setTypeface(tf1);
+		Typeface tf2 = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFACE_ACTION_MAN_BOLD);
+		btnQuestion.setTypeface(tf2);
+		Typeface tf3 = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFACE_ACTION_MAN_BOLD);
+		btnChallenge.setTypeface(tf3);
+		Typeface tf4 = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFACE_ACTION_MAN_BOLD);
+		btnNewIdeas.setTypeface(tf4);
 
 		btnBuild.setOnClickListener(this);
 		btnQuestion.setOnClickListener(this);

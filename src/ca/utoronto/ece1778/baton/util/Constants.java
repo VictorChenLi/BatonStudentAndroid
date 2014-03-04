@@ -19,6 +19,10 @@ public final class Constants {
 	public final static String TALK_INTENT_CHALLENGE = "talk_challenge";
 	public final static String TALK_INTENT_QUESTION = "talk_question";
 	public final static String TALK_INTENT_NEW_IDEA = "talk_new_idea";
+	
+	/**path for Typeface assets*/
+	public final static String TYPEFACE_COMIC_RELIEF = "fonts/ComicRelief.ttf";
+	public final static String TYPEFACE_ACTION_MAN_BOLD = "fonts/Action_Man_Bold.ttf";
 
 	public final static String SQLLITE_STUDENT_DATABASE_NAME = "baton_student";
 	public final static String SQLLITE_TABLE_USER_PROFILE = "GCM_USER_PROFILE";

@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >    
-      
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,8 +12,6 @@
         android:orientation="horizontal"
         android:weightSum="4" >
     </LinearLayout>
-
-   
 
     <!-- name -->
 
@@ -23,34 +20,36 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:orientation="horizontal"
-        android:weightSum="7" >
+        android:weightSum="7.5" >
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1.5"
+            android:textAlignment="4" />
 
-         <Button
+        <Button
             android:id="@+id/talk_btnBuild"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_margin="5dip"
-            android:layout_weight="5"
-            android:text = "Build"/>
+            android:layout_weight="4.5"
+            android:drawableLeft="@drawable/talk_build_s"
+            android:textSize="26sp"
+            android:text="Build" />
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
         android:orientation="horizontal"
-        android:weightSum="7" >
+        android:weightSum="7.5" >
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:textAlignment="4" />
 
         <Button
@@ -58,8 +57,10 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_margin="5dip"
-            android:layout_weight="5"
-            android:text = "Question"/>
+            android:layout_weight="4.5"
+            android:textSize="26sp"
+             android:drawableLeft="@drawable/talk_question_s"
+            android:text="Question" />
     </LinearLayout>
 
     <LinearLayout
@@ -67,45 +68,49 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:orientation="horizontal"
-        android:weightSum="7" >
+        android:weightSum="7.5" >
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:textAlignment="4" />
 
-       <Button
+        <Button
             android:id="@+id/talk_btnChallenge"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_margin="5dip"
-            android:layout_weight="5"
-            android:text = "Challenge"/>
-    </LinearLayout>
+            android:layout_weight="4.5"
+            android:textSize="26sp"
+            android:drawableLeft="@drawable/talk_challenge_s"
+            android:text="Challenge" />
 
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
         android:orientation="horizontal"
-        android:weightSum="7" >
+        android:weightSum="7.5" >
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:textAlignment="4" />
+
         <Button
             android:id="@+id/talk_btnNew"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_margin="5dip"
-            android:layout_weight="5"
-            android:text = "New Idea"/>
+            android:layout_weight="4.5"
+            android:textSize="26sp"
+            android:drawableLeft="@drawable/talk_new_idea_s"
+            android:text="New Idea" />
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -113,9 +118,6 @@
         android:layout_weight="3"
         android:orientation="horizontal"
         android:weightSum="4" >
-
-        
     </LinearLayout>
-
 
 </LinearLayout>
