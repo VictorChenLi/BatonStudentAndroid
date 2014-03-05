@@ -110,7 +110,7 @@ public class WelcomeActivity extends Activity {
 		builder.setIcon(R.drawable.ic_launcher);
 		builder.setTitle("Network Info");
 		builder.setMessage("Network is unavailable on your phone.");
-		builder.setPositiveButton("Setting", new OnClickListener() {
+		builder.setPositiveButton("Network Setting", new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				Intent intent = null;
