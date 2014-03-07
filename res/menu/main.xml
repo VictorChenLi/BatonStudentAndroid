@@ -2,8 +2,23 @@
 
     <item
         android:id="@+id/action_settings"
+        android:icon="@drawable/ic_setting"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:showAsAction="always"
+        android:title="@string/action_settings">
+        <menu>
+            <group>
+                <item
+                    android:id="@+id/menu_profile"
+                    android:title="@string/user_profile"/>
+                <item
+                    android:id="@+id/menu_exit_classroom"
+                    android:title="@string/exit_classroom"/>
+                <item
+                    android:id="@+id/menu_about"
+                    android:title="@string/about"/>
+            </group>
+        </menu>
+    </item>
 
 </menu>

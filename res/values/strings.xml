@@ -32,5 +32,9 @@
     <string name="title_section1">Talk</string>
     <string name="title_section2">Work</string>
     <string name="title_section3">Profile</string>
+    
+    <string name="user_profile">Profile</string>
+    <string name="exit_classroom">Exit classroom</string>
+    <string name="about">About Baton</string>
 
 </resources>
