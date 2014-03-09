@@ -13,11 +13,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
-import ca.utoronto.ece1778.baton.models.StudentProfile;
+//import ca.utoronto.ece1778.baton.models.StudentProfile;
 import ca.utoronto.ece1778.baton.util.AlertDialogManager;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
 import ca.utoronto.ece1778.baton.util.Constants;
 
+import com.baton.publiclib.model.usermanage.UserProfile;
 import com.google.android.gcm.GCMRegistrar;
 
 /**
@@ -177,7 +178,7 @@ public class WelcomeActivity extends Activity {
 			regId = GCMRegistrar.getRegistrationId(this);
 		}
 		// Save the regId into the global application variable
-		CommonUtilities.putGlobalVar(this, StudentProfile.POST_GCM_ID,
+		CommonUtilities.putGlobalVar(this, UserProfile.GCMID_WEB_STR,
 				String.valueOf(regId));
 		// go to the join page
 		Intent intent = new Intent(this, JoinActivity.class);

@@ -1,5 +1,8 @@
 package ca.utoronto.ece1778.baton.screens;
 
+import com.baton.publiclib.model.ticketmanage.Ticket;
+import com.baton.publiclib.model.usermanage.UserProfile;
+
 import android.app.ProgressDialog;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -14,7 +17,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 import ca.utoronto.ece1778.baton.gcm.client.main.R;
-import ca.utoronto.ece1778.baton.models.StudentProfile;
+//import ca.utoronto.ece1778.baton.models.StudentProfile;
 import ca.utoronto.ece1778.baton.syncserver.BatonServerCommunicator;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
 import ca.utoronto.ece1778.baton.util.Constants;
@@ -72,20 +75,20 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		String intentMessage = null;
-		String email = CommonUtilities.getGlobalVar(getActivity(), StudentProfile.POST_EMAIL);
+		String email = CommonUtilities.getGlobalVar(getActivity(), UserProfile.EMAIL_WEB_STR);
 		Log.i("TalkTagFragment","send ticket with email:"+email);
 		switch (v.getId()) {
 		case R.id.talk_btnBuild:
-			intentMessage = Constants.TALK_INTENT_BUILD;
+			intentMessage = Ticket.TALK_INTENT_BUILD_WEB_STR;
 			break;
 		case R.id.talk_btnChallenge:
-			intentMessage = Constants.TALK_INTENT_CHALLENGE;
+			intentMessage = Ticket.TALK_INTENT_CHALLENGE_WEB_STR;
 			break;
 		case R.id.talk_btnNew:
-			intentMessage = Constants.TALK_INTENT_NEW_IDEA;
+			intentMessage = Ticket.TALK_INTENT_NEWIDEA_WEB_STR;
 			break;
 		case R.id.talk_btnQuestion:
-			intentMessage = Constants.TALK_INTENT_QUESTION;
+			intentMessage = Ticket.TALK_INTENT_QUESTION_WEB_STR;
 			break;
 		}
 		if (intentMessage == null) {

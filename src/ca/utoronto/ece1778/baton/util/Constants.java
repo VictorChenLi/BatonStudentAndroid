@@ -12,13 +12,13 @@ public final class Constants {
 	public static String DATE_FORMAT_LONG = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 	
 	//TODO: use these constants in message exchange between server and clients
-	public final static String TALK_TICKET_TYPE = "talk";
-	public final static String TALK_TICKET_TIMESTAMP = "talk_ticket_timestamp";
-	public final static String TALK_TICKET_INTENT = "talk_ticket_intent";
-	public final static String TALK_INTENT_BUILD = "talk_build";
-	public final static String TALK_INTENT_CHALLENGE = "talk_challenge";
-	public final static String TALK_INTENT_QUESTION = "talk_question";
-	public final static String TALK_INTENT_NEW_IDEA = "talk_new_idea";
+//	public final static String TALK_TICKET_TYPE = "talk";
+//	public final static String TALK_TICKET_TIMESTAMP = "talk_ticket_timestamp";
+//	public final static String TALK_TICKET_INTENT = "talk_ticket_intent";
+//	public final static String TALK_INTENT_BUILD = "talk_build";
+//	public final static String TALK_INTENT_CHALLENGE = "talk_challenge";
+//	public final static String TALK_INTENT_QUESTION = "talk_question";
+//	public final static String TALK_INTENT_NEW_IDEA = "talk_new_idea";
 	
 	/**path for Typeface assets*/
 	public final static String TYPEFACE_COMIC_RELIEF = "fonts/ComicRelief.ttf";
