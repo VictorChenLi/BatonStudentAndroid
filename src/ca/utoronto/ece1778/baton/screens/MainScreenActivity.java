@@ -13,8 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
-import ca.utoronto.ece1778.baton.gcm.client.main.R;
+import ca.utoronto.ece1778.baton.STUDENT.R;
 
 
 /**

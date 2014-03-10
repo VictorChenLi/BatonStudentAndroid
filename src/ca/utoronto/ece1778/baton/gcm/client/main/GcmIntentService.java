@@ -19,6 +19,7 @@ package ca.utoronto.ece1778.baton.gcm.client.main;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import ca.utoronto.ece1778.baton.STUDENT.R;
 import ca.utoronto.ece1778.baton.util.Constants;
 
 import com.google.android.gcm.GCMBaseIntentService;
