@@ -126,7 +126,7 @@ public class BatonServerCommunicator {
 			try {
 				/*CommonUtilities.displayMessage(context, context.getString(
 						R.string.server_registering, i, MAX_ATTEMPTS));*/
-				post(serverUrl, params);
+				String returnStr = post(serverUrl, params);
 				//String message = context.getString(R.string.server_registered);
 				//CommonUtilities.displayMessage(context, message);
 				Log.i(TAG, "login success");
@@ -217,7 +217,7 @@ public class BatonServerCommunicator {
 	 * @throws IOException
 	 *             propagated from POST.
 	 */
-	private static void post(String endpoint, Map<String, String> params)
+	private static String post(String endpoint, Map<String, String> params)
 			throws IOException {
 
 		URL url;
@@ -258,6 +258,10 @@ public class BatonServerCommunicator {
 			int status = conn.getResponseCode();
 			if (status != 200) {
 				throw new IOException("Post failed with error code " + status);
+			}
+			else
+			{
+				return conn.getResponseMessage();
 			}
 		} finally {
 			if (conn != null) {
