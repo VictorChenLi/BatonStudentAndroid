@@ -26,14 +26,14 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import ca.utoronto.ece1778.baton.gcm.client.main.R;
-//import ca.utoronto.ece1778.baton.models.StudentProfile;
+import ca.utoronto.ece1778.baton.STUDENT.R;
 import ca.utoronto.ece1778.baton.syncserver.BatonServerCommunicator;
 import ca.utoronto.ece1778.baton.syncserver.InternetConnectionDetector;
 import ca.utoronto.ece1778.baton.util.AlertDialogManager;
 
 import com.baton.publiclib.model.usermanage.UserProfile;
 import com.google.android.gcm.GCMRegistrar;
+//import ca.utoronto.ece1778.baton.models.StudentProfile;
 
 /**
  * User register
@@ -139,7 +139,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
 		Intent i = new Intent(this, JoinActivity.class);
 		i.putExtra(UserProfile.EMAIL_WEB_STR, mStudentProfile.getEmail());
 		// TODO dealing with MD5
-		i.putExtra(UserProfile.EMAIL_WEB_STR, mStudentProfile.getPassword());
+		i.putExtra(UserProfile.PASSWORD_DB_STR, mStudentProfile.getPassword());
 		startActivity(i);
 		finish();
 	}

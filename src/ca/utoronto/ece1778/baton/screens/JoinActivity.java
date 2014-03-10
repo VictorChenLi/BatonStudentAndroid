@@ -15,8 +15,6 @@
  */
 package ca.utoronto.ece1778.baton.screens;
 
-import com.baton.publiclib.model.usermanage.UserProfile;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -28,11 +26,13 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import ca.utoronto.ece1778.baton.gcm.client.main.R;
-//import ca.utoronto.ece1778.baton.models.StudentProfile;
+import ca.utoronto.ece1778.baton.STUDENT.R;
 import ca.utoronto.ece1778.baton.syncserver.BatonServerCommunicator;
 import ca.utoronto.ece1778.baton.util.AlertDialogManager;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
+
+import com.baton.publiclib.model.usermanage.UserProfile;
+//import ca.utoronto.ece1778.baton.models.StudentProfile;
 
 /**
  * Join page

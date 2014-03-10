@@ -1,8 +1,5 @@
 package ca.utoronto.ece1778.baton.screens;
 
-import com.baton.publiclib.model.ticketmanage.Ticket;
-import com.baton.publiclib.model.usermanage.UserProfile;
-
 import android.app.ProgressDialog;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -13,14 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
-import ca.utoronto.ece1778.baton.gcm.client.main.R;
-//import ca.utoronto.ece1778.baton.models.StudentProfile;
+import ca.utoronto.ece1778.baton.STUDENT.R;
 import ca.utoronto.ece1778.baton.syncserver.BatonServerCommunicator;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
 import ca.utoronto.ece1778.baton.util.Constants;
+
+import com.baton.publiclib.model.ticketmanage.Ticket;
+import com.baton.publiclib.model.usermanage.UserProfile;
+//import ca.utoronto.ece1778.baton.models.StudentProfile;
 
 /**
  * 

@@ -15,17 +15,16 @@ import java.util.Random;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import ca.utoronto.ece1778.baton.gcm.client.main.R;
-//import ca.utoronto.ece1778.baton.models.StudentProfile;
-//import ca.utoronto.ece1778.baton.models.Ticket;
+import ca.utoronto.ece1778.baton.STUDENT.R;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
 import ca.utoronto.ece1778.baton.util.Constants;
-import ca.utoronto.ece1778.baton.util.GlobalApplication;
 
 import com.baton.publiclib.model.ticketmanage.Ticket;
 import com.baton.publiclib.model.usermanage.UserProfile;
 import com.baton.publiclib.utility.TimeHelper;
 import com.google.android.gcm.GCMRegistrar;
+//import ca.utoronto.ece1778.baton.models.StudentProfile;
+//import ca.utoronto.ece1778.baton.models.Ticket;
 
 /**
  * 
@@ -123,7 +122,7 @@ public class BatonServerCommunicator {
 		// As the server might be down, we will retry it a couple
 		// times.
 		for (int i = 1; i <= MAX_ATTEMPTS; i++) {
-			Log.d(TAG, "Attempt #" + i + " to register");
+			Log.d(TAG, "Attempt #" + i + " to login");
 			try {
 				/*CommonUtilities.displayMessage(context, context.getString(
 						R.string.server_registering, i, MAX_ATTEMPTS));*/
