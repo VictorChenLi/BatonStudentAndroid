@@ -15,11 +15,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import ca.utoronto.ece1778.baton.STUDENT.R;
 
-
 /**
  * 
  * @author Yi Zhao
- *
+ * 
  */
 public class MainScreenActivity extends FragmentActivity implements
 		ActionBar.TabListener {
@@ -42,7 +41,7 @@ public class MainScreenActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//requestWindowFeature(Window.FEATURE_NO_TITLE);
+		// requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main_screen);
 
 		// Set up the action bar.
@@ -83,23 +82,23 @@ public class MainScreenActivity extends FragmentActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.main, menu);
-	    return super.onCreateOptionsMenu(menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	        case R.id.menu_profile:
-	            return true;
-	        case R.id.menu_exit_classroom:
-	        	return true;
-	        case R.id.menu_about:
-	        	return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		switch (item.getItemId()) {
+		case R.id.menu_profile:
+			return true;
+		case R.id.menu_exit_classroom:
+			return true;
+		case R.id.menu_about:
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	@Override
@@ -136,20 +135,14 @@ public class MainScreenActivity extends FragmentActivity implements
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a DummySectionFragment (defined as a static inner class
 			// below) with the page number as its lone argument.
-			switch(position){
+			switch (position) {
 			case 0:
 				fragment = new TalkTagFragment();
 				break;
 			case 1:
 				fragment = new WorkTagFragment();
 				break;
-			case 2:
-				fragment = new ProfileTagFragment();
-				break;
 			}
-			/*Bundle args = new Bundle();
-			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
-			fragment.setArguments(args);*/
 			return fragment;
 		}
 

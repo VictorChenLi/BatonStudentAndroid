@@ -33,7 +33,7 @@ import com.google.android.gcm.GCMRegistrar;
  */
 public class BatonServerCommunicator {
 	private static final int MAX_ATTEMPTS = 5;
-	private static final int BACKOFF_MILLI_SECONDS = 2000;
+	private static final int BACKOFF_MILLI_SECONDS = 1000;
 	private static final Random random = new Random();
 	private static final String TAG = "BatonServerCommunicator";
 	
@@ -116,6 +116,7 @@ public class BatonServerCommunicator {
 		params.put(UserProfile.EMAIL_WEB_STR, token[0]);
 		params.put(POST_CLASSROOM, token[1]);
 		params.put(UserProfile.PASSWORD_WEB_STR, token[2]);
+		params.put(UserProfile.TEACHER_LOGINID_WEB_STR, token[3]);
 		params.put(UserProfile.GCMID_WEB_STR, GCMRegistrar.getRegistrationId(context));
 
 		long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
@@ -200,7 +201,6 @@ public class BatonServerCommunicator {
 			post(serverUrl, params);
 			return true;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;

@@ -47,6 +47,7 @@ public class JoinActivity extends Activity implements OnClickListener {
 	EditText txtEmail;
 	EditText txtClassroom;
 	EditText txtPassword;
+	EditText txtTeacherId;
 	Button btnRegister;
 	Button btnJoin;
 
@@ -61,6 +62,7 @@ public class JoinActivity extends Activity implements OnClickListener {
 		txtEmail = (EditText) findViewById(R.id.login_txtEmail);
 		txtClassroom = (EditText) findViewById(R.id.login_txtClassroomName);
 		txtPassword = (EditText) findViewById(R.id.login_txtPassword);
+		txtTeacherId = (EditText) findViewById(R.id.login_txtTeacherId);
 		btnJoin = (Button) findViewById(R.id.login_btnJoin);
 		btnRegister = (Button) findViewById(R.id.login_btnRegister);
 
@@ -89,13 +91,14 @@ public class JoinActivity extends Activity implements OnClickListener {
 			String email = txtEmail.getText().toString();
 			String classroom = txtClassroom.getText().toString();
 			String password = txtPassword.getText().toString();
+			String teacherId = txtTeacherId.getText().toString();
 			CommonUtilities.putGlobalVar(this, UserProfile.EMAIL_WEB_STR, email);
 			// Check if user filled the form
 			if (email.trim().length() > 0 && password.trim().length() > 0
-					&& classroom.trim().length() > 0) {
-				new AsyncJoinTask().execute(new String[] {email,classroom,password});
+					&& classroom.trim().length() > 0 && teacherId.trim().length() > 0) {
+				new AsyncJoinTask().execute(new String[] {email,classroom,password,teacherId});
 			} else {
-				alert.showAlertDialog(JoinActivity.this, "Login Error!",
+				alert.showAlertDialog(JoinActivity.this, "Incompleted Information",
 						"Please fill the form", false);
 			}
 			break;
