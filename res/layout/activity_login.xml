@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="18" >
+    android:weightSum="20" >
 
     <!-- "Baton" -->
 
@@ -160,7 +160,7 @@
             android:textStyle="italic"
             android:typeface="sans" />
     </LinearLayout>
-
+    
     <!-- Button Join! -->
 
     <LinearLayout

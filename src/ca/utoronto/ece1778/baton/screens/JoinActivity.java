@@ -42,14 +42,12 @@ import com.baton.publiclib.model.usermanage.UserProfile;
 public class JoinActivity extends Activity implements OnClickListener {
 	// alert dialog manager
 	AlertDialogManager alert = new AlertDialogManager();
-	
-	private JoinActivity demo;
 
 	// UI elements
 	EditText txtEmail;
 	EditText txtClassroom;
 	EditText txtPassword;
-	EditText txtTeacherLoginId;
+	EditText txtTeacherId;
 	Button btnRegister;
 	Button btnJoin;
 
@@ -60,14 +58,14 @@ public class JoinActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
-		demo=this;
+
 		txtEmail = (EditText) findViewById(R.id.login_txtEmail);
 		txtClassroom = (EditText) findViewById(R.id.login_txtClassroomName);
 		txtPassword = (EditText) findViewById(R.id.login_txtPassword);
+		txtTeacherId = (EditText) findViewById(R.id.login_txtTeacherLoginId);
 		btnJoin = (Button) findViewById(R.id.login_btnJoin);
 		btnRegister = (Button) findViewById(R.id.login_btnRegister);
-		txtTeacherLoginId=(EditText) findViewById(R.id.login_txtTeacherLoginId);
-		
+
 		btnJoin.setOnClickListener(this);
 		btnRegister.setOnClickListener(this);
 		
@@ -93,15 +91,14 @@ public class JoinActivity extends Activity implements OnClickListener {
 			String email = txtEmail.getText().toString();
 			String classroom = txtClassroom.getText().toString();
 			String password = txtPassword.getText().toString();
-			String teacherLoginId = txtTeacherLoginId.getText().toString();
-			
+			String teacherId = txtTeacherId.getText().toString();
 			CommonUtilities.putGlobalVar(this, UserProfile.EMAIL_WEB_STR, email);
 			// Check if user filled the form
 			if (email.trim().length() > 0 && password.trim().length() > 0
-					&& classroom.trim().length() > 0) {
-				new AsyncJoinTask().execute(new String[] {email,classroom,password,teacherLoginId});
+					&& classroom.trim().length() > 0 && teacherId.trim().length() > 0) {
+				new AsyncJoinTask().execute(new String[] {email,classroom,password,teacherId});
 			} else {
-				alert.showAlertDialog(JoinActivity.this, "Login Error!",
+				alert.showAlertDialog(JoinActivity.this, "Incompleted Information",
 						"Please fill the form", false);
 			}
 			break;
@@ -139,7 +136,7 @@ public class JoinActivity extends Activity implements OnClickListener {
 		@Override
 		protected String doInBackground(String... token) {
 			String result = BatonServerCommunicator.login(
-					demo, token);
+					getApplicationContext(), token);
 			//String result = BatonServerCommunicator.REPLY_MESSAGE_LOGIN_SUCCESS;
 			return result;
 		}
