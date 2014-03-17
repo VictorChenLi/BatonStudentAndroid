@@ -11,7 +11,6 @@ public final class Constants {
 	// For universal usage of time format
 	public static String DATE_FORMAT_LONG = "yyyy-MM-dd'T'HH:mm:ss.SSS";
 	
-	//TODO: use these constants in message exchange between server and clients
 //	public final static String TALK_TICKET_TYPE = "talk";
 //	public final static String TALK_TICKET_TIMESTAMP = "talk_ticket_timestamp";
 //	public final static String TALK_TICKET_INTENT = "talk_ticket_intent";
