@@ -46,6 +46,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
 
 	AlertDialogManager alert = new AlertDialogManager();
 
+	private RegisterActivity demo;
 	ProgressDialog mProgress = null;
 
 	// Internet detector
@@ -73,7 +74,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_register);
-
+		demo=this;
 		cd = new InternetConnectionDetector(getApplicationContext());
 
 		// Check if Internet present
@@ -184,7 +185,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
 			// String result =
 			// BatonServerCommunicator.REPLY_MESSAGE_REGISTER_SUCCESS;
 			String result = BatonServerCommunicator.register(
-					getApplicationContext(), u);
+					demo, u);
 			return result;
 		}
 

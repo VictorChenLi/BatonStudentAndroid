@@ -1,6 +1,10 @@
 package ca.utoronto.ece1778.baton.syncserver;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -9,6 +13,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -19,8 +24,11 @@ import ca.utoronto.ece1778.baton.STUDENT.R;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
 import ca.utoronto.ece1778.baton.util.Constants;
 
+import com.baton.publiclib.model.classmanage.ClassLesson;
+import com.baton.publiclib.model.classmanage.VirtualClass;
 import com.baton.publiclib.model.ticketmanage.Ticket;
 import com.baton.publiclib.model.usermanage.UserProfile;
+import com.baton.publiclib.utility.JsonHelper;
 import com.baton.publiclib.utility.TimeHelper;
 import com.google.android.gcm.GCMRegistrar;
 //import ca.utoronto.ece1778.baton.models.StudentProfile;
@@ -114,9 +122,10 @@ public class BatonServerCommunicator {
 		String serverUrl = Constants.SERVER_URL + "/login?";
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(UserProfile.EMAIL_WEB_STR, token[0]);
-		params.put(POST_CLASSROOM, token[1]);
+		params.put(VirtualClass.CLASSROOM_NAME_WEB_STR, token[1]);
 		params.put(UserProfile.PASSWORD_WEB_STR, token[2]);
 		params.put(UserProfile.GCMID_WEB_STR, GCMRegistrar.getRegistrationId(context));
+		params.put(UserProfile.TEACHER_LOGINID_WEB_STR, token[3]);
 
 		long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
 		// As the server might be down, we will retry it a couple
@@ -127,11 +136,13 @@ public class BatonServerCommunicator {
 				/*CommonUtilities.displayMessage(context, context.getString(
 						R.string.server_registering, i, MAX_ATTEMPTS));*/
 				String returnStr = post(serverUrl, params);
+				ClassLesson lesson = JsonHelper.deserialize(returnStr,ClassLesson.class);
+				CommonUtilities.putGlobalVar((Activity)context, ClassLesson.LESSONID_WEB_STR, String.valueOf(lesson.getLid()));
 				//String message = context.getString(R.string.server_registered);
 				//CommonUtilities.displayMessage(context, message);
 				Log.i(TAG, "login success");
 				return REPLY_MESSAGE_LOGIN_SUCCESS;
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// Here we are simplifying and retrying on any error; in a real
 				// application, it should retry only on unrecoverable errors
 				// (like HTTP error code 503).
@@ -147,7 +158,7 @@ public class BatonServerCommunicator {
 					Log.d(TAG, "Thread interrupted: abort remaining retries!");
 					Thread.currentThread().interrupt();
 					return REPLY_MESSAGE_LOGIN_FAIL;
-				}
+				} 
 				// increase backoff exponentially
 				backoff *= 2;
 			}
@@ -196,6 +207,7 @@ public class BatonServerCommunicator {
 		params.put(Ticket.TICKETCONTENT_WEB_STR, intent[0]);
 		params.put(Ticket.TICKETTYPE_WEB_STR, Ticket.TICKET_TYPE_TALK);
 		params.put(Ticket.TIMESTAMP_WEB_STR, TimeHelper.getStrTimeFromMillis(System.currentTimeMillis()));
+		params.put(ClassLesson.LESSONID_WEB_STR, CommonUtilities.getGlobalVar(context, ClassLesson.LESSONID_WEB_STR));
 		try {
 			post(serverUrl, params);
 			return true;
@@ -261,7 +273,17 @@ public class BatonServerCommunicator {
 			}
 			else
 			{
-				return conn.getResponseMessage();
+				InputStream in = new BufferedInputStream(conn.getInputStream());
+				StringBuffer sb = new StringBuffer("");
+				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+				String inputLine="";
+				while((inputLine=reader.readLine())!=null)
+				{
+					sb.append(inputLine);
+					sb.append("\n");
+				}
+				in.close();
+				return sb.toString();
 			}
 		} finally {
 			if (conn != null) {

@@ -3,6 +3,7 @@
 	<name>BatonStudentAndroid</name>
 	<comment></comment>
 	<projects>
+		<project>BatonPublic</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

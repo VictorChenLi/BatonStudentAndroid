@@ -107,6 +107,33 @@
             android:typeface="sans" />
     </LinearLayout>
 
+    <!-- teacher loginid -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal"
+        android:weightSum="7" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="4" />
+
+        <EditText
+            android:id="@+id/login_txtTeacherLoginId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="5"
+            android:hint="Enter the teacher unique ID"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:typeface="sans" />
+    </LinearLayout>
+
     <!-- Login classroom name -->
 
     <LinearLayout
@@ -169,7 +196,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="0dp"
                 android:layout_weight="2"
-                android:weightSum="5.5" >
+                android:weightSum="9" >
 
                 <Button
                     android:id="@+id/login_btnForgetPwd"
@@ -188,8 +215,21 @@
                     android:id="@+id/login_btnJoin"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
-                    android:layout_weight="2.5"
+                    android:layout_weight="3"
                     android:background="@drawable/button_join" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.5" >
+                </TextView>
+                
+                <Button
+                    android:id="@+id/login_btnRegister"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="2.5"
+                    android:background="@drawable/button_register" />
             </TableRow>
 
             <TableRow
@@ -205,39 +245,6 @@
         </TableLayout>
     </LinearLayout>
 
-    <!-- Button Register! -->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:orientation="horizontal"
-        android:weightSum="8" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="2"
-            android:orientation="vertical"
-            android:weightSum="4" >
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/login_btnRegister"
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2"
-                android:background="@drawable/button_register" />
-        </LinearLayout>
-    </LinearLayout>
+   
 
 </LinearLayout>
