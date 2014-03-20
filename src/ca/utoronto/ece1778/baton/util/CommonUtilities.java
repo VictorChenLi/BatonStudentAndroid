@@ -6,6 +6,7 @@ import java.util.Locale;
 
 //import ca.utoronto.ece1778.baton.models.StudentProfile;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
@@ -59,6 +60,18 @@ public class CommonUtilities {
 	public static void putGlobalVar(Activity context,String key, String value)
 	{
 		GlobalApplication global = (GlobalApplication) context.getApplication();
+		global.put(key, value);
+	}
+	
+	public static String getGlobalVar(Application application,String key)
+	{
+		GlobalApplication global = (GlobalApplication) application;
+		return global.get(key);
+	}
+	
+	public static void putGlobalVar(Application application,String key, String value)
+	{
+		GlobalApplication global = (GlobalApplication) application;
 		global.put(key, value);
 	}
 }
