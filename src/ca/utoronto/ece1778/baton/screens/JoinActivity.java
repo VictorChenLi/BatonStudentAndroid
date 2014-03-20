@@ -62,7 +62,7 @@ public class JoinActivity extends Activity implements OnClickListener {
 		txtEmail = (EditText) findViewById(R.id.login_txtEmail);
 		txtClassroom = (EditText) findViewById(R.id.login_txtClassroomName);
 		txtPassword = (EditText) findViewById(R.id.login_txtPassword);
-		txtTeacherId = (EditText) findViewById(R.id.login_txtTeacherId);
+		txtTeacherId = (EditText) findViewById(R.id.login_txtTeacherLoginId);
 		btnJoin = (Button) findViewById(R.id.login_btnJoin);
 		btnRegister = (Button) findViewById(R.id.login_btnRegister);
 

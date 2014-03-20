@@ -3,6 +3,7 @@ package ca.utoronto.ece1778.baton.util;
 public final class Constants {
 	/**Baton sync server url on Amozon*/
 	public static final String SERVER_URL = "http://54.213.105.123:8080/BatonSyncServer";
+
 	/**Baton sync server url local */
 	//public static final String SERVER_URL = "http://138.51.59.55:8080/BatonSyncServer";
 	/**Baton Google project id*/

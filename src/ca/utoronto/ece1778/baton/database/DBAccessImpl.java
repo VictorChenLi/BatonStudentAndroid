@@ -1,13 +1,14 @@
 package ca.utoronto.ece1778.baton.database;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+
+import com.baton.publiclib.model.ticketmanage.Ticket;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
-import com.baton.publiclib.model.ticketmanage.Ticket;
 
 public class DBAccessImpl implements DBAccess {
 	
@@ -48,7 +49,7 @@ public class DBAccessImpl implements DBAccess {
     {
     	List<Ticket> list=new ArrayList<Ticket>();
         while (cursor.moveToNext())
-        	 list.add(new Ticket(cursor.getInt(0), cursor.getInt(1), cursor.getString(2),cursor.getString(3), cursor.getString(4), cursor.getString(5)));
+        	 list.add(new Ticket(cursor.getInt(0), cursor.getInt(1), cursor.getString(2),cursor.getString(3), cursor.getString(4), cursor.getInt(5), cursor.getString(6)));
         return list;
     }
 
