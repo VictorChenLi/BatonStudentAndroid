@@ -123,7 +123,7 @@ public class BatonServerCommunicator {
 
 		String serverUrl = Constants.SERVER_URL + "/login?";
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(UserProfile.EMAIL_WEB_STR, token[0]);
+		params.put(UserProfile.LOGINID_WEB_STR, token[0]);
 		params.put(VirtualClass.CLASSROOM_NAME_WEB_STR, token[1]);
 		params.put(UserProfile.PASSWORD_WEB_STR, token[2]);
 		params.put(UserProfile.GCMID_WEB_STR,
@@ -213,7 +213,7 @@ public class BatonServerCommunicator {
 		String gcm_regId = CommonUtilities.getGlobalVar(context,
 				UserProfile.GCMID_WEB_STR);
 		params.put(UserProfile.GCMID_WEB_STR, gcm_regId);
-		params.put(UserProfile.EMAIL_WEB_STR, intent[1]);
+		params.put(UserProfile.LOGINID_WEB_STR, intent[1]);
 		params.put(Ticket.TICKETCONTENT_WEB_STR, intent[0]);
 		params.put(Ticket.TICKETTYPE_WEB_STR, Ticket.TICKET_TYPE_TALK);
 		params.put(Ticket.TIMESTAMP_WEB_STR,

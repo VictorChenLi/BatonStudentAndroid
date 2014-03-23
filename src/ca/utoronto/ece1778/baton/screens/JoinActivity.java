@@ -44,7 +44,7 @@ public class JoinActivity extends Activity implements OnClickListener {
 	AlertDialogManager alert = new AlertDialogManager();
 
 	// UI elements
-	EditText txtEmail;
+	EditText txtloginId;
 	EditText txtClassroom;
 	EditText txtPassword;
 	EditText txtTeacherId;
@@ -59,7 +59,7 @@ public class JoinActivity extends Activity implements OnClickListener {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 
-		txtEmail = (EditText) findViewById(R.id.login_txtEmail);
+		txtloginId = (EditText) findViewById(R.id.login_txtLoginId);
 		txtClassroom = (EditText) findViewById(R.id.login_txtClassroomName);
 		txtPassword = (EditText) findViewById(R.id.login_txtPassword);
 		txtTeacherId = (EditText) findViewById(R.id.login_txtTeacherLoginId);
@@ -73,10 +73,10 @@ public class JoinActivity extends Activity implements OnClickListener {
 
 		/*in case the previous context is RegisterActivity*/
 		Intent intent = this.getIntent();
-		String email = intent.getStringExtra(UserProfile.EMAIL_WEB_STR);
+		String loginId = intent.getStringExtra(UserProfile.LOGINID_WEB_STR);
 		String pwd = intent.getStringExtra(UserProfile.PASSWORD_WEB_STR);
-		if (email != null && !email.equals("")) {
-			txtEmail.setText(email);
+		if (loginId != null && !loginId.equals("")) {
+			txtloginId.setText(loginId);
 		}
 		if (pwd != null && !pwd.equals("")) {
 			txtPassword.setText(pwd);
@@ -88,15 +88,15 @@ public class JoinActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.login_btnJoin:
-			String email = txtEmail.getText().toString();
+			String loginId = txtloginId.getText().toString();
 			String classroom = txtClassroom.getText().toString();
 			String password = txtPassword.getText().toString();
 			String teacherId = txtTeacherId.getText().toString();
-			CommonUtilities.putGlobalVar(this, UserProfile.EMAIL_WEB_STR, email);
+			CommonUtilities.putGlobalVar(this, UserProfile.LOGINID_WEB_STR, loginId);
 			// Check if user filled the form
-			if (email.trim().length() > 0 && password.trim().length() > 0
+			if (loginId.trim().length() > 0 && password.trim().length() > 0
 					&& classroom.trim().length() > 0 && teacherId.trim().length() > 0) {
-				new AsyncJoinTask().execute(new String[] {email,classroom,password,teacherId});
+				new AsyncJoinTask().execute(new String[] {loginId,classroom,password,teacherId});
 			} else {
 				alert.showAlertDialog(JoinActivity.this, "Incompleted Information",
 						"Please fill the form", false);

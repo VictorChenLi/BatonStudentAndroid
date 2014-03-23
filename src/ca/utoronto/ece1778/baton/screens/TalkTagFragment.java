@@ -74,8 +74,8 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		String intentMessage = null;
-		String email = CommonUtilities.getGlobalVar(getActivity(), UserProfile.EMAIL_WEB_STR);
-		Log.i("TalkTagFragment","send ticket with email:"+email);
+		String loginId = CommonUtilities.getGlobalVar(getActivity(), UserProfile.LOGINID_WEB_STR);
+		Log.i("TalkTagFragment","send ticket with loginId:"+loginId);
 		switch (v.getId()) {
 		case R.id.talk_btnBuild:
 			intentMessage = Ticket.TALK_INTENT_BUILD_WEB_STR;
@@ -95,7 +95,7 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 					"Please choose your paticipate intent", Toast.LENGTH_SHORT)
 					.show();
 		}
-		new AsyncSendTalkTicketTask().execute(new String[] { intentMessage,email });
+		new AsyncSendTalkTicketTask().execute(new String[] { intentMessage,loginId });
 	}
 
 	/*

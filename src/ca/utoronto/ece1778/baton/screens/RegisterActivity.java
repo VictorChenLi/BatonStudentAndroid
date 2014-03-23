@@ -138,7 +138,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
 
 	public void goToJoinPage() {
 		Intent i = new Intent(this, JoinActivity.class);
-		i.putExtra(UserProfile.EMAIL_WEB_STR, mStudentProfile.getEmail());
+		i.putExtra(UserProfile.LOGINID_WEB_STR, mStudentProfile.getLogin_id());
 		// TODO dealing with MD5
 		i.putExtra(UserProfile.PASSWORD_DB_STR, mStudentProfile.getPassword());
 		startActivity(i);
