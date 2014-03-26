@@ -1,14 +1,13 @@
 package ca.utoronto.ece1778.baton.database;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-
-import com.baton.publiclib.model.ticketmanage.Ticket;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.baton.publiclib.model.ticketmanage.Ticket;
 
 public class DBAccessImpl implements DBAccess {
 	

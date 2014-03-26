@@ -1,5 +1,7 @@
 package ca.utoronto.ece1778.baton.screens;
 
+import java.util.Hashtable;
+
 import android.app.ProgressDialog;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -31,13 +33,15 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 	 * The fragment argument representing the section number for this fragment.
 	 */
 	public static final String ARG_SECTION_NUMBER = "0";
+	static final String TAG = "TalkTagFragment";
 
 	Button btnBuild;
 	Button btnQuestion;
 	Button btnChallenge;
 	Button btnNewIdeas;
 
-	ProgressDialog mProgress;
+	ProgressDialog mProgress = null;
+	AsyncSendTalkTicketTask mTask = null;
 
 	public TalkTagFragment() {
 	}
@@ -45,6 +49,7 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		Log.i(TAG,"onCreateView called");
 		View rootView = inflater.inflate(R.layout.fragment_talk_tab, container,
 				false);
 		btnBuild = (Button) rootView.findViewById(R.id.talk_btnBuild);
@@ -66,9 +71,65 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 		btnChallenge.setOnClickListener(this);
 		btnNewIdeas.setOnClickListener(this);
 
-		mProgress = new ProgressDialog(getActivity());
+		if(mProgress==null)
+		    mProgress = new ProgressDialog(getActivity());
 
 		return rootView;
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+	    Log.i(TAG,"onSaveInstanceState called");
+		super.onSaveInstanceState(outState);
+		Hashtable<String, Object> returnObject = new Hashtable<String, Object>();
+		if (mTask != null && !mTask.isCompleted) {
+			Log.i(TAG, "mTask is not finished while tilted, saved with mProgress");
+			mTask.setFragment(null);
+			returnObject.put("mTask", mTask);
+			returnObject.put("mProgress", mProgress);
+		}
+		outState.putSerializable("savedState",returnObject);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void onViewStateRestored(Bundle savedInstanceState) {
+		Log.i(TAG,"onViewStateRestored called");
+		super.onViewStateRestored(savedInstanceState);
+		if (savedInstanceState!=null && savedInstanceState.get("savedState") != null) {
+			Hashtable<String, Object> savedState = (Hashtable<String, Object>) savedInstanceState.get("savedState");
+			Log.i(TAG, "Hashtable retained");
+			Object objectTask = ((Hashtable<String, Object>) savedState).get("mTask");
+			Object objectProgress = ((Hashtable<String, Object>) savedState).get("mProgress");
+			if (objectTask != null) {
+				Log.i(TAG, "mTask be retained");
+				mTask = (AsyncSendTalkTicketTask) objectTask;
+				mTask.setFragment(this);
+			}
+			if (objectProgress != null) {
+				Log.i(TAG, "mProgress be retained to " + this);
+				mProgress = (ProgressDialog) objectProgress;
+				showMyProgressDialog(mProgress);
+			}
+		}
+	}
+
+	private void showMyProgressDialog(ProgressDialog mProgress2) {
+		mProgress.setMessage("Sending to teacher...");
+		mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		mProgress.setCancelable(false);
+		mProgress.setProgress(0);
+		mProgress.show();		
+	}
+
+	@Override
+	public void onDestroy() {
+		Log.i(TAG,"onDestroy called");
+		if (mProgress != null && mProgress.isShowing()) {
+			mProgress.dismiss();
+			Log.i(TAG, "mProgress dismissed onDestroy called");
+		}
+		super.onDestroy();
 	}
 
 	@Override
@@ -95,7 +156,17 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 					"Please choose your paticipate intent", Toast.LENGTH_SHORT)
 					.show();
 		}
-		new AsyncSendTalkTicketTask().execute(new String[] { intentMessage,loginId });
+		mTask = new AsyncSendTalkTicketTask(this);
+		mTask.execute(new String[] { intentMessage,loginId });
+	}
+
+	public void onTaskCompleted(boolean result) {
+		if(mProgress!=null && mProgress.isShowing())
+		    mProgress.dismiss();
+		if(result)
+			Toast.makeText(getActivity(), R.string.server_sendticket_success, Toast.LENGTH_SHORT).show();
+		else
+			Toast.makeText(getActivity(), R.string.server_sendticket_error, Toast.LENGTH_SHORT).show();
 	}
 
 	/*
@@ -105,7 +176,15 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 	 * information that is passed when the task is completed to the post-task
 	 * code
 	 */
-	class AsyncSendTalkTicketTask extends AsyncTask<String, Void, Boolean> {
+	class AsyncSendTalkTicketTask extends AsyncTask<String, Void, Void> {
+		public boolean isCompleted = false;
+        TalkTagFragment fragment = null;
+        boolean result = false;
+        
+        private AsyncSendTalkTicketTask(TalkTagFragment frag){
+        	this.fragment = frag;
+        }
+        
 		@Override
 		protected void onPreExecute() {
 			mProgress.setMessage("Sending to teacher...");
@@ -115,23 +194,32 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 			mProgress.show();
 		}
 
+		
 		@Override
-		protected Boolean doInBackground(String... intent) {
+		protected Void doInBackground(String... intent) {
 			// TODO: implement sendTalkIntent in BatonServerCommunicator, and assign "result" with the feedback message to student
-			return BatonServerCommunicator.sendTalkIntent(getActivity(), intent);
+			result = BatonServerCommunicator.sendTalkIntent(getActivity(), intent);
+			return null;
 		}
 
 		@Override
-		protected void onProgressUpdate(Void... unused) {
+		protected void onPostExecute(Void unused) {
+			isCompleted = true;
+			notifyFragmentTaskCompleted(result);
+			
 		}
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			mProgress.dismiss();
-			if(true==result)
-				Toast.makeText(getActivity(), R.string.server_sendticket_success, Toast.LENGTH_SHORT).show();
-			else
-				Toast.makeText(getActivity(), R.string.server_sendticket_error, Toast.LENGTH_SHORT).show();
+		
+		private void notifyFragmentTaskCompleted(boolean result2) {
+			if (null != fragment) {
+				fragment.onTaskCompleted(result2);
+			}			
+		}
+		
+		private void setFragment(TalkTagFragment frag) {
+			this.fragment = frag;
+			if (isCompleted) {
+				notifyFragmentTaskCompleted(result);
+			}
 		}
 	}
 }

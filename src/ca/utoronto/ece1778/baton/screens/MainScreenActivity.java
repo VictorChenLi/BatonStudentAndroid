@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,7 +23,7 @@ import ca.utoronto.ece1778.baton.STUDENT.R;
  */
 public class MainScreenActivity extends FragmentActivity implements
 		ActionBar.TabListener {
-
+    final static String TAG = "MainScreenActivity";
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
 	 * fragments for each of the sections. We use a
@@ -39,11 +40,16 @@ public class MainScreenActivity extends FragmentActivity implements
 	ViewPager mViewPager;
 
 	@Override
+	public void onDestroy() {
+		Log.i(TAG,"onDestroy called");
+		super.onDestroy();
+	}
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main_screen);
-
+		
 		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);

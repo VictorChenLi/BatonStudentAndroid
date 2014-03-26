@@ -1,21 +1,13 @@
 package ca.utoronto.ece1778.baton.database;
 
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.database.sqlite.SQLiteOpenHelper;
+
 import com.baton.publiclib.model.classmanage.ClassLesson;
 import com.baton.publiclib.model.ticketmanage.Ticket;
-
-import android.app.Activity;
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.Toast;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
 	public static final String TB_ticket="ticket";

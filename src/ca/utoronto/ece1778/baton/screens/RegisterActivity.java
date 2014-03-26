@@ -15,11 +15,14 @@
  */
 package ca.utoronto.ece1778.baton.screens;
 
+import java.util.Hashtable;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -28,11 +31,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 import ca.utoronto.ece1778.baton.STUDENT.R;
 import ca.utoronto.ece1778.baton.syncserver.BatonServerCommunicator;
-import ca.utoronto.ece1778.baton.syncserver.InternetConnectionDetector;
 import ca.utoronto.ece1778.baton.util.AlertDialogManager;
 
 import com.baton.publiclib.model.usermanage.UserProfile;
 import com.google.android.gcm.GCMRegistrar;
+
 //import ca.utoronto.ece1778.baton.models.StudentProfile;
 
 /**
@@ -47,10 +50,6 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	AlertDialogManager alert = new AlertDialogManager();
 
 	private RegisterActivity demo;
-	ProgressDialog mProgress = null;
-
-	// Internet detector
-	InternetConnectionDetector cd;
 
 	// UI elements
 	EditText txtFirstName;
@@ -60,6 +59,9 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	EditText txtPassword;
 	EditText txtConfirmPwd;
 	Button btnRegister;
+
+	AsyncRegisterTask mTask = null;
+	ProgressDialog mProgress = null;
 
 	String pw = null;
 	String con_pw = null;
@@ -74,19 +76,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_register);
-		demo=this;
-		cd = new InternetConnectionDetector(getApplicationContext());
-
-		// Check if Internet present
-		if (!cd.isConnectingToInternet()) {
-			// Internet Connection is not present
-			alert.showAlertDialog(RegisterActivity.this,
-					"Internet Connection Error",
-					"Please connect to working Internet connection", false);
-			// stop executing code by return
-			return;
-		}
-
+		demo = this;
 		txtFirstName = (EditText) findViewById(R.id.register_txtFirstName);
 		txtLastName = (EditText) findViewById(R.id.register_txtLastName);
 		txtEmail = (EditText) findViewById(R.id.register_txtEmail);
@@ -94,18 +84,63 @@ public class RegisterActivity extends Activity implements OnClickListener {
 		txtPassword = (EditText) findViewById(R.id.register_txtPassword);
 		txtConfirmPwd = (EditText) findViewById(R.id.register_txtConfirmPwd);
 		gcm_id = GCMRegistrar.getRegistrationId(getApplicationContext());
-		// Log.i(TAG, "on create gcm_id:" + gcm_id);
 
 		btnRegister = (Button) findViewById(R.id.register_btnRegister);
 		btnRegister.setOnClickListener(this);
+		if (mProgress == null)
+			mProgress = new ProgressDialog(this);
+	}
 
-		mProgress = new ProgressDialog(this);
+	@Override
+	protected void onDestroy() {
+		Log.i(TAG, "onDestroy called");
+		if (mProgress != null && mProgress.isShowing()) {
+			mProgress.dismiss();
+			Log.i(TAG, "mProgress dismissed onDestroy called");
+		}
+
+		super.onDestroy();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		Log.i(TAG, "onRestoreInstanceState called");
+		super.onRestoreInstanceState(savedInstanceState);
+		if (savedInstanceState!=null && savedInstanceState.get("savedState") != null) {
+			Hashtable<String, Object> savedState = (Hashtable<String, Object>) savedInstanceState.get("savedState");
+			Log.i(TAG, "Hashtable retained");
+			Object objectTask = ((Hashtable<String, Object>) savedState).get("mTask");
+			Object objectProgress = ((Hashtable<String, Object>) savedState).get("mProgress");
+			if (objectTask != null) {
+				Log.i(TAG, "mTask be retained");
+				mTask = (AsyncRegisterTask) objectTask;
+				mTask.setActivity(this);
+			}
+			if (objectProgress != null) {
+				Log.i(TAG, "mProgress be retained to " + this);
+				mProgress = (ProgressDialog) objectProgress;
+				showMyProgressDialog(mProgress);
+			}
+		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		Log.i(TAG, "onSaveInstanceState called");
+		Hashtable<String, Object> returnObject = new Hashtable<String, Object>();
+		if (mTask != null && !mTask.isCompleted) {
+			Log.i(TAG, "mTask is not finished while tilted, saved with mProgress");
+			mTask.setActivity(null);
+			returnObject.put("mTask", mTask);
+			returnObject.put("mProgress", mProgress);
+		}
+		outState.putSerializable("savedState", returnObject);
 	}
 
 	@Override
 	public void onClick(View v) {
-		// Log.i(TAG, "RegisterActivity onClick called");
-
 		String fName = txtFirstName.getText().toString();
 		String lName = txtLastName.getText().toString();
 		String loginId = txtLoginID.getText().toString();
@@ -115,9 +150,6 @@ public class RegisterActivity extends Activity implements OnClickListener {
 
 		mStudentProfile = new UserProfile(gcm_id, loginId, email, pw, fName,
 				lName, UserProfile.USERTYPE_STUDENT);
-
-		// Log.i(TAG, "in on Click " + mStudentProfile.toString());
-
 		// Check if user filled the form
 		if (!isProfileCompleted(mStudentProfile)) {
 			alert.showAlertDialog(RegisterActivity.this,
@@ -129,9 +161,8 @@ public class RegisterActivity extends Activity implements OnClickListener {
 			Toast.makeText(this, "Password entered doesn't match.",
 					Toast.LENGTH_LONG).show();
 		} else {
-			// Log.i(TAG, "ProfileCompleted");
-			new AsyncRegisterTask()
-					.execute(new UserProfile[] { mStudentProfile });
+			mTask = new AsyncRegisterTask(this);
+			mTask.execute(new UserProfile[] { mStudentProfile });
 		}
 
 	}
@@ -143,6 +174,23 @@ public class RegisterActivity extends Activity implements OnClickListener {
 		i.putExtra(UserProfile.PASSWORD_DB_STR, mStudentProfile.getPassword());
 		startActivity(i);
 		finish();
+	}
+
+	public void onTaskCompleted(String result) {
+		if (mProgress != null && mProgress.isShowing())
+			mProgress.dismiss();
+		Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+		if (result.equals(BatonServerCommunicator.REPLY_MESSAGE_REGISTER_SUCCESS)) {
+			goToJoinPage();
+		}
+	}
+
+	private void showMyProgressDialog(ProgressDialog pd) {
+		pd.setMessage("Registering...");
+		pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		pd.setCancelable(false);
+		pd.setProgress(0);
+		pd.show();
 	}
 
 	private boolean isProfileCompleted(final UserProfile user) {
@@ -168,10 +216,17 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	 * information that is passed when the task is completed to the post-task
 	 * code
 	 */
-	class AsyncRegisterTask extends AsyncTask<UserProfile, Void, String> {
+	class AsyncRegisterTask extends AsyncTask<UserProfile, Void, Void> {
+		RegisterActivity activity;
+		public boolean isCompleted = false;
+		String result = null;
+
+		private AsyncRegisterTask(RegisterActivity act) {
+			this.activity = act;
+		}
+
 		@Override
 		protected void onPreExecute() {
-			// System.out.println("onPreExecute() called");
 			mProgress.setMessage("Registering...");
 			mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			mProgress.setCancelable(false);
@@ -180,27 +235,29 @@ public class RegisterActivity extends Activity implements OnClickListener {
 		}
 
 		@Override
-		protected String doInBackground(UserProfile... users) {
+		protected Void doInBackground(UserProfile... users) {
 			UserProfile u = users[0];
-			// String result =
-			// BatonServerCommunicator.REPLY_MESSAGE_REGISTER_SUCCESS;
-			String result = BatonServerCommunicator.register(
-					demo, u);
-			return result;
+			result = BatonServerCommunicator.register(demo, u);
+			return null;
 		}
 
 		@Override
-		protected void onProgressUpdate(Void... unused) {
+		protected void onPostExecute(Void unused) {
+			/** notify the UI thread that the process is completed */
+			isCompleted = true;
+			notifyActivityTaskCompleted(result);
 		}
 
-		@Override
-		protected void onPostExecute(String result) {
-			mProgress.dismiss();
-			Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT)
-					.show();
-			if (result
-					.equals(BatonServerCommunicator.REPLY_MESSAGE_REGISTER_SUCCESS)) {
-				goToJoinPage();
+		private void notifyActivityTaskCompleted(String result2) {
+			if (null != activity) {
+				activity.onTaskCompleted(result);
+			}
+		}
+
+		private void setActivity(RegisterActivity act) {
+			this.activity = act;
+			if (isCompleted) {
+				notifyActivityTaskCompleted(result);
 			}
 		}
 	}
