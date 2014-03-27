@@ -130,41 +130,12 @@ public class JoinActivity extends Activity implements OnClickListener {
 		outState.putSerializable("savedState", returnObject);
 	}
 
-	/**
-	 * After a screen orientation change, this method is invoked. As we're going
-	 * to state save the task, we can no longer associate it with the Activity
-	 * that is going to be destroyed here.
-	 * 
-	 * We also save the state of the progress dialog
-	 */
-	/*
-	 * @Override public Object onRetainNonConfigurationInstance() { Log.i(TAG,
-	 * "OnRetainNonConfigurationInstance called"); Hashtable<String, Object>
-	 * returnObject = new Hashtable<String, Object>(); if(mTask==null)
-	 * Log.i(TAG,"mTask is null"); if (mTask != null && !mTask.isCompleted) {
-	 * Log.i(TAG, "mTask is not finished while tilted, saved with mProgress");
-	 * mTask.setActivity(null); returnObject.put("mTask", mTask);
-	 * returnObject.put("mProgress", mProgress); } Bundle d = new Bundle();
-	 * d.putSerializable("mTask",returnObject); return returnObject; }
-	 */
-
 	@Override
 	protected void onDestroy() {
 		Log.i(TAG, "onDestroy called");
 		if (mProgress != null && mProgress.isShowing()) {
 			mProgress.dismiss();
 			Log.i(TAG, "mProgress dismissed onDestroy called");
-			/*
-			 * if (mProgress == null) {
-			 *//**
-			 * not be printed actually, which means, mProgress wouldn't become
-			 * null
-			 */
-			/*
-			 * Log.i(TAG,
-			 * "mProgress becomes null after being dismissed onDestroy called");
-			 * }
-			 */
 		}
 
 		super.onDestroy();

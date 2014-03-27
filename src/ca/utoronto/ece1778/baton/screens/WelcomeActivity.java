@@ -1,5 +1,7 @@
 package ca.utoronto.ece1778.baton.screens;
 
+import java.util.Hashtable;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -12,6 +14,9 @@ import android.net.NetworkInfo.State;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.widget.ProgressBar;
 import ca.utoronto.ece1778.baton.STUDENT.R;
 import ca.utoronto.ece1778.baton.util.AlertDialogManager;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
@@ -19,7 +24,7 @@ import ca.utoronto.ece1778.baton.util.Constants;
 
 import com.baton.publiclib.model.usermanage.UserProfile;
 import com.google.android.gcm.GCMRegistrar;
-//import ca.utoronto.ece1778.baton.models.StudentProfile;
+
 
 /**
  * Welcome page of Baton Student Check app enviornment: network connection,
@@ -29,32 +34,24 @@ import com.google.android.gcm.GCMRegistrar;
  * 
  */
 
-// TODO: need to change to use AsyncTask and progress bar
 public class WelcomeActivity extends Activity {
+	static final String TAG = "WelcomeActivity";
 
-	AsyncTask<Void, Void, Void> mRegisterTask;
-
+	AsyncGCMRegTask mTask;
 	// Alert dialog manager
 	AlertDialogManager alert = new AlertDialogManager();
-	
-	AlertDialog dialog ;
+
+	AlertDialog mDialog;
+	ProgressBar mProgressBar;
 
 	ConnectivityManager manager;
 
-	AlertDialog mDialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// requestWindowFeature(Window.FEATURE_NO_TITLE);//开始画面去掉标题栏
+		requestWindowFeature(Window.FEATURE_NO_TITLE);//开始画面去掉标题栏
 		setContentView(R.layout.welcome);
-	}
-
-	@Override
-	protected void onResume() {
-		Log.i("WelcomActivity", "onResume Called");
-		super.onResume();
-
 		// Check if GCM configuration is set
 		if (Constants.SERVER_URL == null || Constants.SENDER_ID == null
 				|| Constants.SERVER_URL.length() == 0
@@ -72,18 +69,28 @@ public class WelcomeActivity extends Activity {
 		// Make sure the manifest was properly set - comment out this line
 		// while developing the app, then uncomment it when it's ready.
 		GCMRegistrar.checkManifest(this);
+	}
 
+	@Override
+	protected void onResume() {
+		Log.i("WelcomActivity", "onResume Called");
+		super.onResume();
+		mProgressBar = (ProgressBar)findViewById(R.id.progressBar_initializing);
+		mProgressBar.setVisibility(View.VISIBLE);
 		// check network
 		boolean isNetworkOk = checkNetworkState();
 		if (isNetworkOk) {
-			State gprs = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)!=null?manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState():null;
-			State wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)!=null?manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState():null;
+			State gprs = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE) != null ? manager
+					.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() : null;
+			State wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI) != null ? manager
+					.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() : null;
 			if (wifi == State.CONNECTED || wifi == State.CONNECTING) {
-				Log.i("WelcomActivity","wifi connected");
-				go();
-				
+				Log.i("WelcomActivity", "wifi connected");
+				mTask = new AsyncGCMRegTask(WelcomeActivity.this);
+				mTask.execute();
+
 			} else if (gprs == State.CONNECTED || gprs == State.CONNECTING) {
-				Log.i("WelcomActivity","no wifi but data network connected");
+				Log.i("WelcomActivity", "no wifi but data network connected");
 				// need user to confirm whether to continue with data flow
 				confirmWithGPRS();
 			}
@@ -92,8 +99,37 @@ public class WelcomeActivity extends Activity {
 			setNetwork();
 		}
 	}
-
 	
+	@Override
+	@SuppressWarnings("unchecked")
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		Log.i(TAG, "onRestoreInstanceState called");
+		super.onRestoreInstanceState(savedInstanceState);
+		if (savedInstanceState!=null && savedInstanceState.get("savedState") != null) {
+			Hashtable<String, Object> savedState = (Hashtable<String, Object>) savedInstanceState.get("savedState");
+			Log.i(TAG, "Hashtable retained");
+			Object objectTask = ((Hashtable<String, Object>) savedState).get("mTask");
+			if (objectTask != null) {
+				Log.i(TAG, "mTask be retained");
+				mTask = (AsyncGCMRegTask) objectTask;
+				mTask.setActivity(this);
+			}
+		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		Log.i(TAG, "onSaveInstanceState called");
+		Hashtable<String, Object> returnObject = new Hashtable<String, Object>();
+		if (mTask != null && !mTask.isCompleted) {
+			Log.i(TAG, "mTask is not finished while tilted, saved with mProgress");
+			mTask.setActivity(null);
+			returnObject.put("mTask", mTask);
+		}
+		outState.putSerializable("savedState", returnObject);
+	}
+
 	private boolean checkNetworkState() {
 		boolean flag = false;
 		manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -125,22 +161,22 @@ public class WelcomeActivity extends Activity {
 					intent = new Intent();
 					ComponentName component = new ComponentName(
 							"com.android.settings",
-							"com.android.settings.Settings");//WirelessSettings
+							"com.android.settings.Settings");// WirelessSettings
 					intent.setComponent(component);
 					intent.setAction("android.intent.action.VIEW");
 				}
 				startActivity(intent);
 			}
 		});
-	
+
 		builder.setNegativeButton("Exit Baton", new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				WelcomeActivity.this.finish();
 			}
 		});
-		dialog = builder.create();
-		dialog.show();
+		mDialog = builder.create();
+		mDialog.show();
 	}
 
 	private void confirmWithGPRS() {
@@ -151,45 +187,36 @@ public class WelcomeActivity extends Activity {
 		builder.setPositiveButton("Continue", new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Log.i("WelcomActivity","continue to use data package");
-				go();
+				Log.i("WelcomActivity", "continue to use data package");
+				mTask = new AsyncGCMRegTask(WelcomeActivity.this);
+				mTask.execute();
 			}
 		});
-	
+
 		builder.setNegativeButton("Exit Baton", new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				WelcomeActivity.this.finish();
 			}
 		});
-		dialog = builder.create();
-		dialog.show();
+		mDialog = builder.create();
+		mDialog.show();
 	}
+	
 
-	private void go(){
-		// Get GCM registration id
-		String regId = GCMRegistrar.getRegistrationId(this);
-		// Check if regid already presents
-		if (regId.equals("")) {
-			// Registration is not present, register now with GCM
-			GCMRegistrar.register(this, Constants.SENDER_ID);
-			regId = GCMRegistrar.getRegistrationId(this);
-		}
-		// Save the regId into the global application variable
-		CommonUtilities.putGlobalVar(this, UserProfile.GCMID_WEB_STR,
-				String.valueOf(regId));
+	public void onGCMRegCompleted() {
 		// go to the join page
 		Intent intent = new Intent(this, JoinActivity.class);
 		WelcomeActivity.this.finish();
-		startActivity(intent); 
-
+		startActivity(intent);
 	}
+
 
 	@Override
 	protected void onDestroy() {
 		Log.i("WelcomActivity", "onDestroy Called");
-		if (mRegisterTask != null) {
-			mRegisterTask.cancel(true);
+		if (mTask != null) {
+			mTask.cancel(true);
 		}
 		if (GCMRegistrar.isRegistered(this))
 			GCMRegistrar.onDestroy(this);
@@ -199,9 +226,65 @@ public class WelcomeActivity extends Activity {
 	@Override
 	protected void onPause() {
 		Log.i("WelcomActivity", "onPause Called");
-        if(dialog!=null)
-        	dialog.dismiss();
+		if (mDialog != null)
+			mDialog.dismiss();
 		super.onPause();
 	}
 
+	class AsyncGCMRegTask extends AsyncTask<Void, Void, Void> {
+		WelcomeActivity activity;
+		boolean isCompleted = false;
+		String regId = "";
+
+		private AsyncGCMRegTask(WelcomeActivity act) {
+			this.activity = act;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			mProgressBar = (ProgressBar)findViewById(R.id.progressBar_initializing);
+			mProgressBar.setVisibility(View.VISIBLE);
+		}
+
+		@Override
+		protected Void doInBackground(Void... unused) {
+			String regId = GCMRegistrar.getRegistrationId(activity);
+			// Check if regid already presents
+			if (regId == null || regId.equals("")) {
+				// TODO: what if GCM register fail?
+				GCMRegistrar.register(activity, Constants.SENDER_ID);
+				regId = GCMRegistrar.getRegistrationId(activity);
+			}
+			Log.i(TAG,"AsyncGCMRegTask get regId: " + regId);
+			CommonUtilities.putGlobalVar(activity, UserProfile.GCMID_WEB_STR, String.valueOf(regId));
+			return null;
+		}
+
+		@Override
+		protected void onProgressUpdate(Void... unused) {
+		}
+
+		@Override
+		protected void onPostExecute(Void unused) {
+			/** notify the UI thread that the process is completed */
+			isCompleted = true;
+			mProgressBar.setVisibility(View.GONE);
+			notifyGCMRegCompleted();
+		}
+
+		private void setActivity(WelcomeActivity act) {
+			this.activity = act;
+			if (isCompleted) {
+				notifyGCMRegCompleted();
+			}
+		}
+
+		private void notifyGCMRegCompleted() {
+			if (null != activity) {
+				activity.onGCMRegCompleted();
+			}
+		}
+
+	}
+	
 }
