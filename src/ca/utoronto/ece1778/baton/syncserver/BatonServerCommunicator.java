@@ -24,6 +24,8 @@ import ca.utoronto.ece1778.baton.STUDENT.R;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
 import ca.utoronto.ece1778.baton.util.Constants;
 
+import com.baton.publiclib.infrastructure.exception.ErrorCode;
+import com.baton.publiclib.infrastructure.exception.ServiceException;
 import com.baton.publiclib.model.classmanage.ClassLesson;
 import com.baton.publiclib.model.classmanage.VirtualClass;
 import com.baton.publiclib.model.ticketmanage.Ticket;
@@ -70,47 +72,16 @@ public class BatonServerCommunicator {
 		params.put(UserProfile.PASSWORD_WEB_STR, user.getPassword());
 		params.put(UserProfile.USERTYPE_WEB_STR, UserProfile.USERTYPE_STUDENT);
 
-		long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
-		// As the server might be down, we will retry it a couple
-		// times.
-		for (int i = 1; i <= MAX_ATTEMPTS; i++) {
-			Log.d(TAG, "Attempt #" + i + " to register");
-			try {
-				/*
-				 * CommonUtilities.displayMessage(context, context.getString(
-				 * R.string.server_registering, i, MAX_ATTEMPTS));
-				 */
-				post(serverUrl, params);
-				GCMRegistrar.setRegisteredOnServer(context, true);
-				String message = context.getString(R.string.server_registered);
-				// CommonUtilities.displayMessage(context, message);
-				Log.i(TAG, "register success");
-				return REPLY_MESSAGE_REGISTER_SUCCESS;
-			} catch (IOException e) {
-				// Here we are simplifying and retrying on any error; in a real
-				// application, it should retry only on unrecoverable errors
-				// (like HTTP error code 503).
-				Log.e(TAG, "Failed to register on attempt " + i + ":" + e);
-				if (i == MAX_ATTEMPTS) {
-					break;
-				}
-				try {
-					Log.d(TAG, "Sleeping for " + backoff + " ms before retry");
-					Thread.sleep(backoff);
-				} catch (InterruptedException e1) {
-					// Activity finished before we complete - exit.
-					Log.d(TAG, "Thread interrupted: abort remaining retries!");
-					Thread.currentThread().interrupt();
-					return REPLY_MESSAGE_REGISTER_FAIL;
-				}
-				// increase backoff exponentially
-				backoff *= 2;
-			}
+		try {
+			post(serverUrl, params);
+			GCMRegistrar.setRegisteredOnServer(context, true);
+			Log.i(TAG, "register success");
+			return REPLY_MESSAGE_REGISTER_SUCCESS;
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			return REPLY_MESSAGE_REGISTER_FAIL;
 		}
-		String message = context.getString(R.string.server_register_error,
-				MAX_ATTEMPTS);
-		// CommonUtilities.displayMessage(context, message);
-		return REPLY_MESSAGE_REGISTER_FAIL;
+
 	}
 
 	/**
@@ -128,53 +99,24 @@ public class BatonServerCommunicator {
 		params.put(UserProfile.GCMID_WEB_STR,
 				GCMRegistrar.getRegistrationId(context));
 		params.put(UserProfile.TEACHER_LOGINID_WEB_STR, token[3]);
+		
+		try {
 
-		long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
-		// As the server might be down, we will retry it a couple
-		// times.
-		for (int i = 1; i <= MAX_ATTEMPTS; i++) {
-			Log.d(TAG, "Attempt #" + i + " to login");
-			try {
-				/*
-				 * CommonUtilities.displayMessage(context, context.getString(
-				 * R.string.server_registering, i, MAX_ATTEMPTS));
-				 */
-				String returnStr = post(serverUrl, params);
-				ClassLesson lesson = JsonHelper.deserialize(returnStr,
-						ClassLesson.class);
-				CommonUtilities.putGlobalVar((Application)context,
-						ClassLesson.LESSONID_WEB_STR,
-						String.valueOf(lesson.getLid()));
-				// String message =
-				// context.getString(R.string.server_registered);
-				// CommonUtilities.displayMessage(context, message);
-				Log.i(TAG, "login success");
-				return REPLY_MESSAGE_LOGIN_SUCCESS;
-			} catch (Exception e) {
-				// Here we are simplifying and retrying on any error; in a real
-				// application, it should retry only on unrecoverable errors
-				// (like HTTP error code 503).
-				Log.e(TAG, "Failed to register on attempt " + i + ":" + e);
-				if (i == MAX_ATTEMPTS) {
-					break;
-				}
-				try {
-					Log.d(TAG, "Sleeping for " + backoff + " ms before retry");
-					Thread.sleep(backoff);
-				} catch (InterruptedException e1) {
-					// Activity finished before we complete - exit.
-					Log.d(TAG, "Thread interrupted: abort remaining retries!");
-					Thread.currentThread().interrupt();
-					return REPLY_MESSAGE_LOGIN_FAIL;
-				}
-				// increase backoff exponentially
-				backoff *= 2;
-			}
+			String returnStr = post(serverUrl, params);
+			ClassLesson lesson = JsonHelper.deserialize(returnStr,
+					ClassLesson.class);
+			CommonUtilities.putGlobalVar((Application)context,
+					ClassLesson.LESSONID_WEB_STR,
+					String.valueOf(lesson.getLid()));
+			
+			Log.i(TAG, "login success");
+			return REPLY_MESSAGE_LOGIN_SUCCESS;
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			return REPLY_MESSAGE_LOGIN_FAIL;
 		}
-		String message = context.getString(R.string.server_register_error,
-				MAX_ATTEMPTS);
-		// CommonUtilities.displayMessage(context, message);
-		return REPLY_MESSAGE_LOGIN_FAIL;
+
+		
 	}
 
 	/**
@@ -189,17 +131,13 @@ public class BatonServerCommunicator {
 		try {
 			post(serverUrl, params);
 			GCMRegistrar.setRegisteredOnServer(context, false);
-			String message = context.getString(R.string.server_unregistered);
-			// CommonUtilities.displayMessage(context, message);
-		} catch (IOException e) {
+		} catch (ServiceException e) {
 			// At this point the device is unregistered from GCM, but still
 			// registered in the server.
 			// We could try to unregister again, but it is not necessary:
 			// if the server tries to send a message to the device, it will get
 			// a "NotRegistered" error message and should unregister the device.
-			String message = context.getString(
-					R.string.server_unregister_error, e.getMessage());
-			// CommonUtilities.displayMessage(context, message);
+			e.printStackTrace();
 		}
 	}
 
@@ -219,19 +157,14 @@ public class BatonServerCommunicator {
 				TimeHelper.getStrTimeFromMillis(System.currentTimeMillis()));
 		params.put(ClassLesson.LESSONID_WEB_STR, CommonUtilities.getGlobalVar(
 				context, ClassLesson.LESSONID_WEB_STR));
-		long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
-		// As the server might be down, we will retry it a couple times.
-		for (int i = 1; i <= MAX_ATTEMPTS; i++) {
-			Log.d(TAG, "Attempt #" + i);
-			try {
-				post(serverUrl, params);
-				return true;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+		try {
+			post(serverUrl, params);
+			return true;
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			return false;
 		}
-		return false;
 	}
 
 	/**
@@ -244,11 +177,13 @@ public class BatonServerCommunicator {
 	 * 
 	 * @throws IOException
 	 *             propagated from POST.
+	 * @throws ServiceException 
 	 */
 	private static String post(String endpoint, Map<String, String> params)
-			throws IOException {
+			throws ServiceException {
 
 		URL url;
+		String retStr = null;
 		try {
 			url = new URL(endpoint);
 		} catch (MalformedURLException e) {
@@ -269,40 +204,87 @@ public class BatonServerCommunicator {
 		Log.v(TAG, "Posting '" + body + "' to " + url);
 		byte[] bytes = body.getBytes();
 		HttpURLConnection conn = null;
-		try {
-			Log.e("URL", "> " + url);
-			conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setUseCaches(false);
-			conn.setFixedLengthStreamingMode(bytes.length);
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type",
-					"application/x-www-form-urlencoded;charset=UTF-8");
-			// post the request
-			OutputStream out = conn.getOutputStream();
-			out.write(bytes);
-			out.close();
-			// handle the response
-			int status = conn.getResponseCode();
-			if (status != 200) {
-				throw new IOException("Post failed with error code " + status);
-			} else {
-				InputStream in = new BufferedInputStream(conn.getInputStream());
-				StringBuffer sb = new StringBuffer("");
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(in));
-				String inputLine = "";
-				while ((inputLine = reader.readLine()) != null) {
-					sb.append(inputLine);
-					sb.append("\n");
+		long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
+		// As the server might be down, we will retry it a couple times.
+		for (int i = 1; i <= MAX_ATTEMPTS; i++) {
+
+			Log.d(TAG, "Attempt #" + i);
+			try {
+				Log.e("URL", "> " + url);
+				conn = (HttpURLConnection) url.openConnection();
+				conn.setDoOutput(true);
+				conn.setUseCaches(false);
+				conn.setFixedLengthStreamingMode(bytes.length);
+				conn.setRequestMethod("POST");
+				conn.setRequestProperty("Content-Type",
+						"application/x-www-form-urlencoded;charset=UTF-8");
+				// post the request
+				OutputStream out = conn.getOutputStream();
+				out.write(bytes);
+				out.close();
+				// handle the response
+				int status = conn.getResponseCode();
+				if (status != 200) {
+					if(status==400)
+					{
+						// this is the specific exception
+						String strException = readHttpResponseMsg(conn);
+						ServiceException se = JsonHelper.deserialize(strException, ServiceException.class);
+						throw se;
+					}
+					else
+					{
+						// throw the network exception
+						throw new ServiceException(ErrorCode.Network_connection_Error_Msg,ErrorCode.Email_Not_Exist);
+					}
+				} else {
+					return readHttpResponseMsg(conn);
 				}
-				in.close();
-				return sb.toString();
+			} catch (ServiceException se) {
+				// we handle the 400 error, which is type of exception we already customized
+				// if the errorcode equal to network error, we will try it again
+				// otherwise, we will throw this exception to the upper layer to handle
+				if(!se.getErrorCode().equals(ErrorCode.Network_connection_Error))
+					throw se;
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (conn != null) {
+					conn.disconnect();
+				}
 			}
-		} finally {
-			if (conn != null) {
-				conn.disconnect();
+			Log.e(TAG, "Failed on attempt " + i);
+			if (i == MAX_ATTEMPTS) {
+				break;
 			}
+			try {
+				Log.d(TAG, "Sleeping for " + backoff + " ms before retry");
+				Thread.sleep(backoff);
+			} catch (InterruptedException e1) {
+				// Activity finished before we complete - exit.
+				Log.d(TAG, "Thread interrupted: abort remaining retries!");
+				Thread.currentThread().interrupt();
+				throw new ServiceException(ErrorCode.System_Unknow_Error_Msg,ErrorCode.System_Unknow_Error);
+			}
+			// increase backoff exponentially
+			backoff *= 2;
 		}
+		throw new ServiceException(ErrorCode.Network_connection_Error_Msg,ErrorCode.Network_connection_Error);
+	}
+	
+	public static String readHttpResponseMsg(HttpURLConnection conn) throws IOException
+	{
+		InputStream in = new BufferedInputStream(
+				conn.getInputStream());
+		StringBuffer sb = new StringBuffer("");
+		BufferedReader reader = new BufferedReader(
+				new InputStreamReader(in));
+		String inputLine = "";
+		while ((inputLine = reader.readLine()) != null) {
+			sb.append(inputLine);
+//			sb.append("\n");
+		}
+		in.close();
+		return sb.toString();
 	}
 }
