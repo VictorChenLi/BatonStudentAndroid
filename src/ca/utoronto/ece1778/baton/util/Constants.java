@@ -1,24 +1,18 @@
 package ca.utoronto.ece1778.baton.util;
 
 public final class Constants {
-	/**Baton sync server url on Amozon*/
+	/**Baton sync server url on Amazon*/
 	public static final String SERVER_URL = "http://54.213.105.123:8080/BatonSyncServer";
 
-	/**Baton sync server url local */
+	/**Baton sync server url on localhost*/
+	//public static final String SERVER_URL = "http://192.168.0.108:8080/BatonSyncServer";
+	/**Baton sync server url Victor */
 	//public static final String SERVER_URL = "http://138.51.59.55:8080/BatonSyncServer";
 	/**Baton Google project id*/
 	public static final String SENDER_ID = "553157495789";
 	
 	// For universal usage of time format
 	public static String DATE_FORMAT_LONG = "yyyy-MM-dd'T'HH:mm:ss.SSS";
-	
-//	public final static String TALK_TICKET_TYPE = "talk";
-//	public final static String TALK_TICKET_TIMESTAMP = "talk_ticket_timestamp";
-//	public final static String TALK_TICKET_INTENT = "talk_ticket_intent";
-//	public final static String TALK_INTENT_BUILD = "talk_build";
-//	public final static String TALK_INTENT_CHALLENGE = "talk_challenge";
-//	public final static String TALK_INTENT_QUESTION = "talk_question";
-//	public final static String TALK_INTENT_NEW_IDEA = "talk_new_idea";
 	
 	/**path for Typeface assets*/
 	public final static String TYPEFACE_COMIC_RELIEF = "fonts/ComicRelief.ttf";
@@ -27,4 +21,7 @@ public final class Constants {
 	public final static String SQLLITE_STUDENT_DATABASE_NAME = "baton_student";
 	public final static String SQLLITE_TABLE_USER_PROFILE = "GCM_USER_PROFILE";
 	public final static String USER_COLUMN_KEY = "id";
+	
+	public static final String GCM_TICKETS_UIDS_IN_LESSON = "tickets_uids_in_lesson" ;
+	public static final String DISPLAY_TALK_TICKET_ACTION = "/ca.utoronto.ece1778.baton.student.DISPLAY_TALK_TICKET";
 }

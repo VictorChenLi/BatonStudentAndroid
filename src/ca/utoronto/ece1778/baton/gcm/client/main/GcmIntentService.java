@@ -16,12 +16,17 @@
 
 package ca.utoronto.ece1778.baton.gcm.client.main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import ca.utoronto.ece1778.baton.STUDENT.R;
 import ca.utoronto.ece1778.baton.util.Constants;
 
+import com.baton.publiclib.model.ticketmanage.Ticket;
+import com.baton.publiclib.utility.JsonHelper;
 import com.google.android.gcm.GCMBaseIntentService;
 
 /**
@@ -32,105 +37,131 @@ import com.google.android.gcm.GCMBaseIntentService;
  * wake lock.
  */
 public class GcmIntentService extends GCMBaseIntentService {
- 
-    private static final String TAG = "GCMIntentService";
- 
-    public GcmIntentService() {
-        super(Constants.SENDER_ID);
-    }
- 
-    /**
-     * Method called on device registered
-     **/
-    @Override
-    protected void onRegistered(Context context, String registrationId) {
-        Log.i(TAG, "Device registered: regId = " + registrationId);
-       // CommonUtilities.displayMessage(context, "Your device registred with GCM");
-        //Log.d("NAME", MainActivity.name);
-        //BatonServerCommunicator.registerDevice(context, MainActivity.name, MainActivity.email, registrationId);
-    }
- 
-    /**
-     * Method called on device un registred
-     * */
-    @Override
-    protected void onUnregistered(Context context, String registrationId) {
-        Log.i(TAG, "Device unregistered");
-       // CommonUtilities.displayMessage(context, getString(R.string.gcm_unregistered));
-        //BatonServerCommunicator.unregister(context, registrationId);
-    }
- 
-    /**
-     * Method called on Receiving a new message
-     * */
-    @Override
-    protected void onMessage(Context context, Intent intent) {
-        Log.i(TAG, "onMessage called");
-        //String message = intent.getExtras().getString(CommonUtilities.EXTRA_MESSAGE);
-         
-       // CommonUtilities.displayMessage(context, message);
-        // notifies user
-       // generateNotification(context, message);
-    }
- 
-    /**
-     * Method called on receiving a deleted message
-     * */
-    @Override
-    protected void onDeletedMessages(Context context, int total) {
-        Log.i(TAG, "Received deleted messages notification");
-        String message = getString(R.string.gcm_deleted, total);
-        //CommonUtilities.displayMessage(context, message);
-        // notifies user
-        //generateNotification(context, message);
-    }
- 
-    /**
-     * Method called on Error
-     * */
-    @Override
-    public void onError(Context context, String errorId) {
-        Log.i(TAG, "Received error: " + errorId);
-        //CommonUtilities.displayMessage(context, getString(R.string.gcm_error, errorId));
-    }
- 
-    @Override
-    protected boolean onRecoverableError(Context context, String errorId) {
-        // log message
-        Log.i(TAG, "Received recoverable error: " + errorId);
-        /*CommonUtilities.displayMessage(context, getString(R.string.gcm_recoverable_error,
-                errorId));*/
-        return super.onRecoverableError(context, errorId);
-    }
- 
-    /**
-     * Issues a notification to inform the user that server has sent a message.
-     */
-    /*private static void generateNotification(Context context, String message) {
-        int icon = R.drawable.ic_launcher;
-        long when = System.currentTimeMillis();
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new Notification(icon, message, when);
-         
-        String title = context.getString(R.string.app_name);
-         
-        Intent notificationIntent = new Intent(context, MainActivity.class);
-        // set intent so it does not start a new activity
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent intent =
-                PendingIntent.getActivity(context, 0, notificationIntent, 0);
-        notification.setLatestEventInfo(context, title, message, intent);
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-         
-        // Play default notification sound
-        notification.defaults |= Notification.DEFAULT_SOUND;
-         
-        // Vibrate if vibrate is enabled
-        notification.defaults |= Notification.DEFAULT_VIBRATE;
-        notificationManager.notify(0, notification);      
- 
-    }*/
- 
+
+	private static final String TAG = "GCMIntentService";
+
+	public GcmIntentService() {
+		super(Constants.SENDER_ID);
+	}
+
+	/**
+	 * Method called on device registered
+	 **/
+	@Override
+	protected void onRegistered(Context context, String registrationId) {
+		Log.i(TAG, "Device registered: regId = " + registrationId);
+		// CommonUtilities.displayMessage(context,
+		// "Your device registred with GCM");
+		// Log.d("NAME", MainActivity.name);
+		// BatonServerCommunicator.registerDevice(context, MainActivity.name,
+		// MainActivity.email, registrationId);
+	}
+
+	/**
+	 * Method called on device un registred
+	 * */
+	@Override
+	protected void onUnregistered(Context context, String registrationId) {
+		Log.i(TAG, "Device unregistered");
+		// CommonUtilities.displayMessage(context,
+		// getString(R.string.gcm_unregistered));
+		// BatonServerCommunicator.unregister(context, registrationId);
+	}
+
+	/**
+	 * Method called on Receiving a new message
+	 * */
+	@Override
+	protected void onMessage(Context context, Intent intent) {
+		Log.i(TAG, "onMessage called");
+		Intent out = null;
+		ArrayList<Integer> uid_list = new ArrayList<Integer>();
+		List<Ticket> tl = JsonHelper.deserializeList(intent.getStringExtra(Ticket.TICKET_LIST_WEB_STR), Ticket.class);
+		if (tl != null && tl.size() != 0) {
+			Log.i(TAG, tl.size() + " non-discarded tickets got from current lesson");
+			for (Ticket t : tl) {
+				int uid = t.getUid();
+				Log.i(TAG, "uid: " + uid);
+				uid_list.add(uid);
+			}
+			if (uid_list.size() != 0) {
+				out = new Intent(Constants.DISPLAY_TALK_TICKET_ACTION);
+				out.putIntegerArrayListExtra(Constants.GCM_TICKETS_UIDS_IN_LESSON, uid_list);
+			}
+		}
+		if (out != null) {
+			context.sendBroadcast(out);
+		}
+		// String message =
+		// intent.getExtras().getString(CommonUtilities.EXTRA_MESSAGE);
+
+		// CommonUtilities.displayMessage(context, message);
+		// notifies user
+		// generateNotification(context, message);
+	}
+
+	/**
+	 * Method called on receiving a deleted message
+	 * */
+	@Override
+	protected void onDeletedMessages(Context context, int total) {
+		Log.i(TAG, "Received deleted messages notification");
+		String message = getString(R.string.gcm_deleted, total);
+		// CommonUtilities.displayMessage(context, message);
+		// notifies user
+		// generateNotification(context, message);
+	}
+
+	/**
+	 * Method called on Error
+	 * */
+	@Override
+	public void onError(Context context, String errorId) {
+		Log.i(TAG, "Received error: " + errorId);
+		// CommonUtilities.displayMessage(context, getString(R.string.gcm_error,
+		// errorId));
+	}
+
+	@Override
+	protected boolean onRecoverableError(Context context, String errorId) {
+		// log message
+		Log.i(TAG, "Received recoverable error: " + errorId);
+		/*
+		 * CommonUtilities.displayMessage(context,
+		 * getString(R.string.gcm_recoverable_error, errorId));
+		 */
+		return super.onRecoverableError(context, errorId);
+	}
+
+	/**
+	 * Issues a notification to inform the user that server has sent a message.
+	 */
+	/*
+	 * private static void generateNotification(Context context, String message)
+	 * { int icon = R.drawable.ic_launcher; long when =
+	 * System.currentTimeMillis(); NotificationManager notificationManager =
+	 * (NotificationManager)
+	 * context.getSystemService(Context.NOTIFICATION_SERVICE); Notification
+	 * notification = new Notification(icon, message, when);
+	 * 
+	 * String title = context.getString(R.string.app_name);
+	 * 
+	 * Intent notificationIntent = new Intent(context, MainActivity.class); //
+	 * set intent so it does not start a new activity
+	 * notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+	 * Intent.FLAG_ACTIVITY_SINGLE_TOP); PendingIntent intent =
+	 * PendingIntent.getActivity(context, 0, notificationIntent, 0);
+	 * notification.setLatestEventInfo(context, title, message, intent);
+	 * notification.flags |= Notification.FLAG_AUTO_CANCEL;
+	 * 
+	 * // Play default notification sound notification.defaults |=
+	 * Notification.DEFAULT_SOUND;
+	 * 
+	 * // Vibrate if vibrate is enabled notification.defaults |=
+	 * Notification.DEFAULT_VIBRATE; notificationManager.notify(0,
+	 * notification);
+	 * 
+	 * }
+	 */
+
 }

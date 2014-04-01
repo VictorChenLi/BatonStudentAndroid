@@ -108,7 +108,6 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <!-- Receives the registration id. -->
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-
                 <category android:name="ca.utoronto.ece1778.baton.STUDENT" />
             </intent-filter>
         </receiver>

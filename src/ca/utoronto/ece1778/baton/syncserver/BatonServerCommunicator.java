@@ -9,9 +9,11 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -27,7 +29,9 @@ import ca.utoronto.ece1778.baton.util.Constants;
 import com.baton.publiclib.infrastructure.exception.ErrorCode;
 import com.baton.publiclib.infrastructure.exception.ServiceException;
 import com.baton.publiclib.model.classmanage.ClassLesson;
+import com.baton.publiclib.model.classmanage.ClassParticipate;
 import com.baton.publiclib.model.classmanage.VirtualClass;
+import com.baton.publiclib.model.ticketmanage.TalkTicketForDisplay;
 import com.baton.publiclib.model.ticketmanage.Ticket;
 import com.baton.publiclib.model.usermanage.UserProfile;
 import com.baton.publiclib.utility.JsonHelper;
@@ -43,7 +47,7 @@ import com.google.android.gcm.GCMRegistrar;
  */
 public class BatonServerCommunicator {
 	private static final int MAX_ATTEMPTS = 5;
-	private static final int BACKOFF_MILLI_SECONDS = 2000;
+	private static final int BACKOFF_MILLI_SECONDS = 200;
 	private static final Random random = new Random();
 	private static final String TAG = "BatonServerCommunicator";
 
@@ -99,16 +103,16 @@ public class BatonServerCommunicator {
 		params.put(UserProfile.GCMID_WEB_STR,
 				GCMRegistrar.getRegistrationId(context));
 		params.put(UserProfile.TEACHER_LOGINID_WEB_STR, token[3]);
-		
+
 		try {
 
 			String returnStr = post(serverUrl, params);
 			ClassLesson lesson = JsonHelper.deserialize(returnStr,
 					ClassLesson.class);
-			CommonUtilities.putGlobalVar((Application)context,
+			CommonUtilities.putGlobalVar((Application) context,
 					ClassLesson.LESSONID_WEB_STR,
 					String.valueOf(lesson.getLid()));
-			
+
 			Log.i(TAG, "login success");
 			return REPLY_MESSAGE_LOGIN_SUCCESS;
 		} catch (ServiceException e) {
@@ -116,7 +120,6 @@ public class BatonServerCommunicator {
 			return REPLY_MESSAGE_LOGIN_FAIL;
 		}
 
-		
 	}
 
 	/**
@@ -177,7 +180,7 @@ public class BatonServerCommunicator {
 	 * 
 	 * @throws IOException
 	 *             propagated from POST.
-	 * @throws ServiceException 
+	 * @throws ServiceException
 	 */
 	private static String post(String endpoint, Map<String, String> params)
 			throws ServiceException {
@@ -204,7 +207,7 @@ public class BatonServerCommunicator {
 		Log.v(TAG, "Posting '" + body + "' to " + url);
 		byte[] bytes = body.getBytes();
 		HttpURLConnection conn = null;
-		long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
+		long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(100);
 		// As the server might be down, we will retry it a couple times.
 		for (int i = 1; i <= MAX_ATTEMPTS; i++) {
 
@@ -224,8 +227,9 @@ public class BatonServerCommunicator {
 				out.close();
 				// handle the response
 				int status = conn.getResponseCode();
+				System.out.println("######status:"+status);
 				if (status != 200) {
-					if(status==400)
+					if (status == 400)
 					{
 						// this is the specific exception
 						String strException = readHttpResponseMsg(conn);
@@ -235,16 +239,18 @@ public class BatonServerCommunicator {
 					else
 					{
 						// throw the network exception
-						throw new ServiceException(ErrorCode.Network_connection_Error_Msg,ErrorCode.LoginId_Not_Exist);
+						throw new ServiceException(ErrorCode.Network_connection_Error_Msg, ErrorCode.LoginId_Not_Exist);
 					}
 				} else {
 					return readHttpResponseMsg(conn);
 				}
 			} catch (ServiceException se) {
-				// we handle the 400 error, which is type of exception we already customized
+				// we handle the 400 error, which is type of exception we
+				// already customized
 				// if the errorcode equal to network error, we will try it again
-				// otherwise, we will throw this exception to the upper layer to handle
-				if(!se.getErrorCode().equals(ErrorCode.Network_connection_Error))
+				// otherwise, we will throw this exception to the upper layer to
+				// handle
+				if (!se.getErrorCode().equals(ErrorCode.Network_connection_Error))
 					throw se;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -264,14 +270,14 @@ public class BatonServerCommunicator {
 				// Activity finished before we complete - exit.
 				Log.d(TAG, "Thread interrupted: abort remaining retries!");
 				Thread.currentThread().interrupt();
-				throw new ServiceException(ErrorCode.System_Unknow_Error_Msg,ErrorCode.System_Unknow_Error);
+				throw new ServiceException(ErrorCode.System_Unknow_Error_Msg, ErrorCode.System_Unknow_Error);
 			}
 			// increase backoff exponentially
 			backoff *= 2;
 		}
-		throw new ServiceException(ErrorCode.Network_connection_Error_Msg,ErrorCode.Network_connection_Error);
+		throw new ServiceException(ErrorCode.Network_connection_Error_Msg, ErrorCode.Network_connection_Error);
 	}
-	
+
 	public static String readHttpResponseMsg(HttpURLConnection conn) throws IOException
 	{
 		InputStream in = new BufferedInputStream(
@@ -282,9 +288,36 @@ public class BatonServerCommunicator {
 		String inputLine = "";
 		while ((inputLine = reader.readLine()) != null) {
 			sb.append(inputLine);
-//			sb.append("\n");
+			// sb.append("\n");
 		}
 		in.close();
 		return sb.toString();
+	}
+
+	/**
+	 * get current login students list of the current lesson
+	 * 
+	 * @param lid
+	 *            current lesson id
+	 * @return
+	 */
+	public static List<ClassParticipate> getCurrentLoginBuddies(String lid) throws ServiceException {
+
+		Log.i(TAG, "getCurrentLoginBuddies");
+		List<ClassParticipate> cpList = new ArrayList<ClassParticipate>();
+		String serverUrl = Constants.SERVER_URL + "/getLessonBuddies?";
+		Map<String, String> params = new HashMap<String, String>();
+		params.put(ClassLesson.LESSONID_WEB_STR, lid);
+		String retStr = post(serverUrl, params);
+		Log.i(TAG, "getCurrentLoginBuddies result:" + retStr);
+		cpList = JsonHelper.deserializeList(retStr, ClassParticipate.class);
+		Log.i(TAG, cpList.size() + " login buddies got from server");
+		/*for (ClassParticipate cp : cpList) {
+			Log.i(TAG, "#Buddy#:");
+			Log.i(TAG, cp.toString());
+		}*/
+
+		return cpList;
+
 	}
 }

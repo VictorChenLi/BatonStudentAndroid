@@ -3,121 +3,141 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="horizontal" 
+    android:weightSum="10">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="horizontal"
-        android:weightSum="4" >
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical" 
+        android:layout_weight="7">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:weightSum="4" >
+        </LinearLayout>
+
+        <!-- name -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:weightSum="7.5" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="4" />
+
+            <Button
+                android:id="@+id/talk_btnBuild"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dip"
+                android:layout_weight="5.5"
+                android:drawableLeft="@drawable/talk_build_s"
+                android:text="Build"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:weightSum="7.5" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="4" />
+
+            <Button
+                android:id="@+id/talk_btnQuestion"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dip"
+                android:layout_weight="5.5"
+                android:drawableLeft="@drawable/talk_question_s"
+                android:text="Question"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:weightSum="7.5" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="4" />
+
+            <Button
+                android:id="@+id/talk_btnChallenge"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dip"
+                android:layout_weight="5.5"
+                android:drawableLeft="@drawable/talk_challenge_s"
+                android:text="Challenge"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:weightSum="7.5" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="4" />
+
+            <Button
+                android:id="@+id/talk_btnNew"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_margin="5dip"
+                android:layout_weight="5.5"
+                android:drawableLeft="@drawable/talk_new_idea_s"
+                android:text="New Idea"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="horizontal"
+            android:weightSum="4" >
+        </LinearLayout>
     </LinearLayout>
-
-    <!-- name -->
-
+    
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="horizontal"
-        android:weightSum="7.5" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:textAlignment="4" />
-
-        <Button
-            android:id="@+id/talk_btnBuild"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_margin="5dip"
-            android:layout_weight="4.5"
-            android:drawableLeft="@drawable/talk_build_s"
-            android:textSize="26sp"
-            android:text="Build" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="horizontal"
-        android:weightSum="7.5" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:textAlignment="4" />
-
-        <Button
-            android:id="@+id/talk_btnQuestion"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_margin="5dip"
-            android:layout_weight="4.5"
-            android:textSize="26sp"
-             android:drawableLeft="@drawable/talk_question_s"
-            android:text="Question" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="horizontal"
-        android:weightSum="7.5" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:textAlignment="4" />
-
-        <Button
-            android:id="@+id/talk_btnChallenge"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_margin="5dip"
-            android:layout_weight="4.5"
-            android:textSize="26sp"
-            android:drawableLeft="@drawable/talk_challenge_s"
-            android:text="Challenge" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="horizontal"
-        android:weightSum="7.5" >
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:textAlignment="4" />
-
-        <Button
-            android:id="@+id/talk_btnNew"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_margin="5dip"
-            android:layout_weight="4.5"
-            android:textSize="26sp"
-            android:drawableLeft="@drawable/talk_new_idea_s"
-            android:text="New Idea" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="horizontal"
-        android:weightSum="4" >
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical" 
+        android:layout_weight="3">
+         <ListView
+        android:id="@+id/talk_listView_buddies"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" 
+        android:background="#ff444444"
+        />
     </LinearLayout>
 
 </LinearLayout>

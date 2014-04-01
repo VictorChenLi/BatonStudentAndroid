@@ -1,6 +1,8 @@
 package ca.utoronto.ece1778.baton.screens;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import android.app.ProgressDialog;
 import android.graphics.Typeface;
@@ -13,15 +15,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import ca.utoronto.ece1778.baton.STUDENT.R;
 import ca.utoronto.ece1778.baton.syncserver.BatonServerCommunicator;
 import ca.utoronto.ece1778.baton.util.CommonUtilities;
 import ca.utoronto.ece1778.baton.util.Constants;
 
+import com.baton.publiclib.model.classmanage.ClassParticipate;
 import com.baton.publiclib.model.ticketmanage.Ticket;
 import com.baton.publiclib.model.usermanage.UserProfile;
-//import ca.utoronto.ece1778.baton.models.StudentProfile;
 
 /**
  * 
@@ -39,6 +43,10 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 	Button btnQuestion;
 	Button btnChallenge;
 	Button btnNewIdeas;
+	
+	ListView listView_buddies;
+	TalkParticipantArrayAdapter mListAdapter;
+	List<ClassParticipate> mBuddyList = new ArrayList<ClassParticipate>();
 
 	ProgressDialog mProgress = null;
 	AsyncSendTalkTicketTask mTask = null;
@@ -57,19 +65,24 @@ public class TalkTagFragment extends Fragment implements OnClickListener {
 		btnChallenge = (Button) rootView.findViewById(R.id.talk_btnChallenge);
 		btnNewIdeas = (Button) rootView.findViewById(R.id.talk_btnNew);
 		
-		Typeface tf1 = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFACE_ACTION_MAN_BOLD);
-		btnBuild.setTypeface(tf1);
-		Typeface tf2 = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFACE_ACTION_MAN_BOLD);
-		btnQuestion.setTypeface(tf2);
-		Typeface tf3 = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFACE_ACTION_MAN_BOLD);
-		btnChallenge.setTypeface(tf3);
-		Typeface tf4 = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFACE_ACTION_MAN_BOLD);
-		btnNewIdeas.setTypeface(tf4);
+		Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), Constants.TYPEFACE_ACTION_MAN_BOLD);
+		btnBuild.setTypeface(tf);
+		btnQuestion.setTypeface(tf);
+		btnChallenge.setTypeface(tf);
+		btnNewIdeas.setTypeface(tf);
 
 		btnBuild.setOnClickListener(this);
 		btnQuestion.setOnClickListener(this);
 		btnChallenge.setOnClickListener(this);
 		btnNewIdeas.setOnClickListener(this);
+		
+		listView_buddies = (ListView)rootView.findViewById(R.id.talk_listView_buddies);
+		View header = (View)inflater.inflate(R.layout.list_header_talk_buddies, null);
+		TextView headerText = (TextView)header.findViewById(R.id.talk_txtListHeader);
+		headerText.setTypeface(tf);
+		listView_buddies.addHeaderView(header);
+		mListAdapter = new TalkParticipantArrayAdapter(getActivity(), R.layout.list_item_talk_buddies, mBuddyList);
+		listView_buddies.setAdapter(mListAdapter);
 
 		if(mProgress==null)
 		    mProgress = new ProgressDialog(getActivity());
