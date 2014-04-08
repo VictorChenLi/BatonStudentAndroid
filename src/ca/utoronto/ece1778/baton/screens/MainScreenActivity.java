@@ -274,8 +274,9 @@ public class MainScreenActivity extends FragmentActivity implements
 					if (item.uid == uid) {
 						//TODO: color does not change....
 						Log.i(TAG,"set uid:"+uid+" to green");
-						textview.setTextColor(Color.GREEN);
-						item.txtName.setText("here!");
+						//textview.setTextColor(Color.GREEN);
+						linearlayout.setBackgroundColor(Color.GREEN);
+						//item.txtName.setText("here!");
 					}
 				}
 			}

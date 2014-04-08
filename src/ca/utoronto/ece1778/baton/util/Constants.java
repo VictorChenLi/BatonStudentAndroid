@@ -7,7 +7,7 @@ public final class Constants {
 	/**Baton sync server url on localhost*/
 	//public static final String SERVER_URL = "http://192.168.0.108:8080/BatonSyncServer";
 	/**Baton sync server url Victor */
-	//public static final String SERVER_URL = "http://138.51.59.55:8080/BatonSyncServer";
+	//public static final String SERVER_URL = "http://138.51.220.99:8080/BatonSyncServer";
 	/**Baton Google project id*/
 	public static final String SENDER_ID = "553157495789";
 	
