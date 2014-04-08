@@ -35,6 +35,7 @@ import ca.utoronto.ece1778.baton.util.WakeLocker;
 import com.baton.publiclib.infrastructure.exception.ServiceException;
 import com.baton.publiclib.model.classmanage.ClassLesson;
 import com.baton.publiclib.model.classmanage.ClassParticipate;
+import com.baton.publiclib.utility.JsonHelper;
 
 /**
  * 
@@ -60,7 +61,7 @@ public class MainScreenActivity extends FragmentActivity implements
 	ViewPager mViewPager;
 
 	/** UI item on talk tab */
-	List<ClassParticipate> talkBuddies = new ArrayList<ClassParticipate>();
+//	List<ClassParticipate> talkBuddies = CommonUtilities.getGlobalBuddiesList(getApplication());
 	ListView talkListView;
 	TalkParticipantArrayAdapter talkListAdapter;
 	
@@ -233,7 +234,8 @@ public class MainScreenActivity extends FragmentActivity implements
 			String lid = CommonUtilities.getGlobalVar(MainScreenActivity.this, ClassLesson.LESSONID_WEB_STR);
 			Log.i(TAG, "GetBuddiesTask lesson_id:" + lid);
 			try {
-				talkBuddies = BatonServerCommunicator.getCurrentLoginBuddies(lid);
+					List<ClassParticipate> talkBuddies = BatonServerCommunicator.getCurrentLoginBuddies(lid);
+					CommonUtilities.putGlobalBuddiesList(getApplication(), talkBuddies);
 			} catch (ServiceException e) {
 				e.printStackTrace();
 			}
@@ -248,7 +250,7 @@ public class MainScreenActivity extends FragmentActivity implements
 		@Override
 		protected void onPostExecute(Void unused) {
 			talkListAdapter = new TalkParticipantArrayAdapter(MainScreenActivity.this, R.layout.list_item_talk_buddies,
-					talkBuddies);
+					CommonUtilities.getGlobalBuddiesList(getApplication()));
 			talkListView.setAdapter(talkListAdapter);
 		}
 
@@ -260,26 +262,29 @@ public class MainScreenActivity extends FragmentActivity implements
 			Log.i("MainScreenActivity", "onReceive Called");
 
 			WakeLocker.acquire(getApplicationContext());
-			ArrayList<Integer> uid_list = intent.getIntegerArrayListExtra(Constants.GCM_TICKETS_UIDS_IN_LESSON);
-			talkListView = (ListView) findViewById(R.id.talk_listView_buddies);
-			int count = talkListView.getCount();
-			Log.i(TAG,"count in ListView: " + count);
-			for (int uid : uid_list) {
-				//this listView has a header, so, should begin with the second child
-				for (int i = 1; i < count; i++) {
-					LinearLayout linearlayout = (LinearLayout)talkListView.getAdapter().getView(i, null, null);  
-					TextView textview = (TextView)linearlayout.findViewById(R.id.talk_txtBuddyName);  
-					TalkBuddyRowHolder item = (TalkBuddyRowHolder) (linearlayout.getTag());
-					Log.i(TAG, "item.uid: "+ item.uid + "textview: "+textview.getText().toString());
-					if (item.uid == uid) {
-						//TODO: color does not change....
-						Log.i(TAG,"set uid:"+uid+" to green");
-						textview.setTextColor(Color.GREEN);
-						item.txtName.setText("here!");
-					}
-				}
-			}
-		
+//			ArrayList<Integer> uid_list = intent.getIntegerArrayListExtra(Constants.GCM_TICKETS_UIDS_IN_LESSON);
+//			talkListView = (ListView) findViewById(R.id.talk_listView_buddies);
+//			int count = talkListView.getCount();
+//			Log.i(TAG,"count in ListView: " + count);
+//			for (int uid : uid_list) {
+//				//this listView has a header, so, should begin with the second child
+//				for (int i = 1; i < count; i++) {
+//					LinearLayout linearlayout = (LinearLayout)talkListView.getAdapter().getView(i, null, null);  
+//					TextView textview = (TextView)linearlayout.findViewById(R.id.talk_txtBuddyName);  
+//					TalkBuddyRowHolder item = (TalkBuddyRowHolder) (linearlayout.getTag());
+//					Log.i(TAG, "item.uid: "+ item.uid + "textview: "+textview.getText().toString());
+//					if (item.uid == uid) {
+//						//TODO: color does not change....
+//						Log.i(TAG,"set uid:"+uid+" to green");
+//						textview.setTextColor(Color.GREEN);
+//						item.txtName.setText("here!");
+//					}
+//				}
+//			}
+			List<ClassParticipate> buddies_in_class = JsonHelper.deserializeList(intent.getCharSequenceExtra(Constants.CLASS_PARTICIPATE_IN_LESSON).toString(), ClassParticipate.class);
+			CommonUtilities.putGlobalBuddiesList(getApplication(), buddies_in_class);
+			if(null!=talkListAdapter)
+				talkListAdapter.resetDataList(buddies_in_class);
 			WakeLocker.release();
 		}
 	}
