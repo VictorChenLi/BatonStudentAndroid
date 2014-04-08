@@ -25,6 +25,7 @@ import android.util.Log;
 import ca.utoronto.ece1778.baton.STUDENT.R;
 import ca.utoronto.ece1778.baton.util.Constants;
 
+import com.baton.publiclib.model.classmanage.ClassParticipate;
 import com.baton.publiclib.model.ticketmanage.Ticket;
 import com.baton.publiclib.utility.JsonHelper;
 import com.google.android.gcm.GCMBaseIntentService;
@@ -75,19 +76,12 @@ public class GcmIntentService extends GCMBaseIntentService {
 	protected void onMessage(Context context, Intent intent) {
 		Log.i(TAG, "onMessage called");
 		Intent out = null;
-		ArrayList<Integer> uid_list = new ArrayList<Integer>();
-		List<Ticket> tl = JsonHelper.deserializeList(intent.getStringExtra(Ticket.TICKET_LIST_WEB_STR), Ticket.class);
-		if (tl != null && tl.size() != 0) {
-			Log.i(TAG, tl.size() + " non-discarded tickets got from current lesson");
-			for (Ticket t : tl) {
-				int uid = t.getUid();
-				Log.i(TAG, "uid: " + uid);
-				uid_list.add(uid);
-			}
-			if (uid_list.size() != 0) {
-				out = new Intent(Constants.DISPLAY_TALK_TICKET_ACTION);
-				out.putIntegerArrayListExtra(Constants.GCM_TICKETS_UIDS_IN_LESSON, uid_list);
-			}
+//		List<ClassParticipate> buddies_list = JsonHelper.deserializeList(intent.getStringExtra(Ticket.TICKET_LIST_WEB_STR), ClassParticipate.class);
+		String buddiesStr = intent.getStringExtra(Ticket.TICKET_LIST_WEB_STR);
+		if(null!=buddiesStr&&!buddiesStr.isEmpty())
+		{
+			out = new Intent(Constants.DISPLAY_TALK_TICKET_ACTION);
+			out.putExtra(Constants.CLASS_PARTICIPATE_IN_LESSON, buddiesStr);
 		}
 		if (out != null) {
 			context.sendBroadcast(out);

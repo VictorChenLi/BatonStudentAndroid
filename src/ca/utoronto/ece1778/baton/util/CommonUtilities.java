@@ -2,7 +2,10 @@ package ca.utoronto.ece1778.baton.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+
+import com.baton.publiclib.model.classmanage.ClassParticipate;
 
 //import ca.utoronto.ece1778.baton.models.StudentProfile;
 import android.app.Activity;
@@ -73,5 +76,17 @@ public class CommonUtilities {
 	{
 		GlobalApplication global = (GlobalApplication) application;
 		global.put(key, value);
+	}
+	
+	public static List<ClassParticipate> getGlobalBuddiesList(Application application)
+	{
+		GlobalApplication global = (GlobalApplication) application;
+		return global.getBuddiesList();
+	}
+	
+	public static void putGlobalBuddiesList(Application application, List<ClassParticipate> newBuddiesList)
+	{
+		GlobalApplication global = (GlobalApplication) application;
+		global.putBuddiesList(newBuddiesList);
 	}
 }

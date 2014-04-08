@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,20 @@ public class TalkParticipantArrayAdapter extends ArrayAdapter<ClassParticipate> 
 		this.layoutResourceId = resource;
 		this.data = objects;
 	}
+	
+	public void resetDataList(List<ClassParticipate> newDataList)
+	{
+		data=newDataList;
+		this.notifyDataSetChanged();
+	}
+	
+
+	@Override
+	public int getCount() {
+		return data.size();
+	}
+
+
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -53,6 +68,12 @@ public class TalkParticipantArrayAdapter extends ArrayAdapter<ClassParticipate> 
         Typeface tf = Typeface.createFromAsset(((Activity)context).getAssets(), Constants.TYPEFACE_COMIC_RELIEF);
         holder.txtName.setTypeface(tf);
         holder.uid = cp.getStudent().getUid();
+        
+        if(null!=cp.getCurTicketList()&&!cp.getCurTicketList().isEmpty())
+        {
+        	holder.txtName.setBackgroundColor(Color.GREEN);
+        	holder.txtName.setTextColor(Color.BLACK);
+        }
         
         return row;
 	}

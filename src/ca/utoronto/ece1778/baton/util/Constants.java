@@ -5,7 +5,7 @@ public final class Constants {
 	public static final String SERVER_URL = "http://54.213.105.123:8080/BatonSyncServer";
 
 	/**Baton sync server url on localhost*/
-	//public static final String SERVER_URL = "http://192.168.0.108:8080/BatonSyncServer";
+//	public static final String SERVER_URL = "http://192.168.1.147:8080/BatonSyncServer";
 	/**Baton sync server url Victor */
 	//public static final String SERVER_URL = "http://138.51.220.99:8080/BatonSyncServer";
 	/**Baton Google project id*/
@@ -22,6 +22,7 @@ public final class Constants {
 	public final static String SQLLITE_TABLE_USER_PROFILE = "GCM_USER_PROFILE";
 	public final static String USER_COLUMN_KEY = "id";
 	
+	public static final String CLASS_PARTICIPATE_IN_LESSON = "class_participate_in_lesson";
 	public static final String GCM_TICKETS_UIDS_IN_LESSON = "tickets_uids_in_lesson" ;
 	public static final String DISPLAY_TALK_TICKET_ACTION = "/ca.utoronto.ece1778.baton.student.DISPLAY_TALK_TICKET";
 }
